@@ -1,0 +1,52 @@
+Learning DSA by Example
+
+Are you able to solve problems using data structures and algorithms?
+Are you applying data structures and algorithms in solving problems?
+This book hopes to get you started in coding solutions from scratch using knowledge of data structures and algorithms rather than solely by using already written codes.
+At the end of reading and practicing the content of this book, you should have developed the skill of decomposing a problem and tackling it algorithmically while using appropriate data structures. 
+
+Problem 1
+You have the below dataset:
+
+Orange: #10
+Apple: #30
+Pawpaw: #40
+Lemon: #50
+Guava: #60
+Pineapple: #70
+
+This dataset is an hypothetical dataset of an e-commerce business. 
+
+We want to implement the feature that a user will be able to search for pairs of products based on how much money they have at their disposal. 
+
+For example, I have #100 at my disposal, what combination of products in the store will total that amount? 
+
+How do you solve this problem using the dataset provided? 
+
+Well, there is a tried and tested solution to this problem. You will be learning what the solution is, how to code it and the logic behind the solution.
+
+Lets try and understand the problem. If you don't try to understand the problem, you won't know how to approach solving it. 
+
+"...user will be able to search for pairs of products based on how much money they have at their disposal"
+What is a pair?
+A pair is a set of two things used together or regarded as a unit.
+Based on this, we can rephrase the object to:
+"...user will be able to search for a set of two products whose price total add up to the money they have at their disposal"
+Next, let's convert the objective to programming speak.
+"...find two prices whose total add up to a certain amount"
+"...find two numbers whose total add up to a certain number"
+
+You as the programmer knows what feature you are trying to achieve, you will only check off the feature if you've successfully implemented it. If you fail to correctly rephrase the problem, it just mean you will spend more time solving the problem. That is, the problem will take more of your time until you successfully solve it by getting the rephrasing right and writing the programming solution for it. 
+
+You can't rely on large language models to help you in getting the phrasing right or help you in breaking down the problem. Rely on large language models for code snippets for each micro part of the solution.
+
+Now that the problem has been rephrased to finding two numbers whose total add up to a certain number, we can now say we have a classic two sum problem. We may phrase this same problem in another way and classify the problem as another classic DSA problem, but like I've mentioned, we can only say we've solved the problem if we've implemented the feature we need to implement. 
+
+And by the way, after you've read and practiced the contents of this book, exercise your brain by trying to implement harder to implement features. See how far you can rephrase the feature and convert it to a programming problem. Also see how far you can go breaking down the problem and using large language models to do the coding work.
+
+
+Introducing two sum
+The two sum problem is all about finding two numbers whose sum add up to another number. 
+Given a list of numbers, how do you find two numbers in the list whose sum add up to a specified number?
+That's what the two sum problem is all about.
+
