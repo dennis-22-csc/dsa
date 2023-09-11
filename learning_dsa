@@ -50,3 +50,200 @@ The two sum problem is all about finding two numbers whose sum add up to another
 Given a list of numbers, how do you find two numbers in the list whose sum add up to a specified number?
 That's what the two sum problem is all about.
 
+ 10, 30, 40, 60, 70
+ 
+ The above list contains two numbers whose sum add up to 100. They are 30 and 70.
+ 
+ How do you find the two numbers using code?
+ 
+ Well, lets not dwell too much on the problem.
+ First of all, if you've exposed yourself to DSA problems, you would have learnt one or two approaches to solving the problem. 
+ But rather than approaching the problem using a memorized approach, let's try and reason out the approach using our current level of programming knowlegde.
+ 
+ At this point in your programming journey, we will assume you are already familair with such things as lists, loops, tuples, dictionaries, variables, builtin functions, if statements, etc. 
+ These are the fundamentals. 
+ We will use our current knowledge of the fundamentals to try out different ways to solve the problem. 
+ 
+ We want to find two numbers in a list. 
+ At this point, we should know if we are to find a value in a list, we will be iterating through that list and the traditional way of iterating through a list is to use a loop. 
+ So, we will be looping through the list to find a value, in fact, two values.
+ 
+ When we use a loop to iterate through a list, we get the values, but we want to find two values whose sum add up to another number.
+ In the loop, we will therefore be checking if two values in the list add up to another number. We will be using an if statement to accomplish this.
+ If they add up, we will be returning the two numbers. 
+ In the classic two sum problem, the index of the two numbers is what is returned. To ensure we are also learning DSA, we will solve for both.
+ 
+ So given the below code which gives us access to the values of a list in Python, how do we check if two values in the list add up to a certain number? For example 100?
+ 
+ 
+ prices = [10, 30, 40, 60, 70]
+  
+ for price in prices:
+      
+ Lets see, can we check for the first and second value in the list in each iteration of the loop?
+ Given the code, No.
+ We can only have access to the first and second value in the list in each iteration of the loop if we have access to the index in each iteration of the loop.
+ Can we have access to the index of the values in a list in each iteration of a loop?
+ Yes.
+How?
+By defining the loop as the below:
+   
+   for i in range(len(prices)):
+   
+  All we did here is to create a range of numbers whose value starts from 0 and ends with the value derived when you subtract  1 from the length of the list.
+  By creating such a range of numbers, we get access to the index of each value in the list. 
+  What we basically did is use an existing knowledge to generate indexes that can be used to access values in the list in a correct manner.
+  If you didn't have this knowldege before, you now have it, that we can get the indexes of a list by defining the for loop in a certain way. 
+  
+ Now that we have access to the index of the list which gives us access to the first and second value in each iteration of the loop, will this solve the two sum problem?
+ Let's construct some codes to see.
+ 
+ Based on our current hunch, the below code is constructed:
+ 
+ prices = [10, 30, 40, 60, 70]
+  
+--for i in range(len(prices)):
+--    if ((prices[i] + prices[i + 1]) == 100):
+          print("equal")
+
+
+The code outputted an index out of range exception.
+How do we eliminate the index out of range problem?
+Well, we can add a second condition that states that the print statement should not be executed if i is not the last index.
+How do we define such a condition?
+
+It can be defined thus:
+
+for i in range(len(prices)):
+--    if (i == (len(prices) - 1)):
+          break
+--    if ((prices[i] + prices[i + 1]) == 100):
+          print("equal")
+
+While this approach seems to solve the problem, it has become obvious that the approach won't work when the two numbers don't follow each other. We were asked to find two numbers, not two consecutive numbers.
+
+Run the below, you won't get an output despite the fact two different groups of numbers in the list add up to 100
+
+--prices = [30, 10, 40, 70, 60]
+  
+--for i in range(len(prices)):
+--    if (i == (len(prices) - 1)):
+          break
+--    if ((prices[i] + prices[i + 1]) == 100):
+          print("equal")
+
+
+So, this approach doesn't solve the problem in all situation.
+
+The approach of using the first and second value in each iteration of the loop to check for the two numbers worked in one situation but didnt work in another situation, what other approach can we try?
+First of all, lets understand why we used the approach of checking the first and second value in each iteration of the loop. We did that because we need a way to have the two numbers at the same time so we can perform an addition operation on them and see if their sum add up to 100.
+So basically, what we need now is a way to have two numbers in a list in each iteration of the loop. We've tried one approach, it gave us the two numbers, but it didn't work in all situations. 
+What other way can we use to access two numbers in a list in a particular iteration of a loop?
+Well, one approach is to define an inner loop. 
+Why an inner loop?
+Well, the idea is that you want to have two numbers in each iteration of the list, an inner loop makes it possible for you to tranverse the entire list in each iteration of the loop. Which means you can have access to a value and any other value in the list in each iteration of the loop just by defining an inner loop.
+
+
+for i in range(len(prices)):
+      for j in range(len(prices)):
+          print(f"{i} and {j}")
+
+The above gives you access to two numbers in each iteration of the outer loop. 
+The below output is produced:
+
+0 and 0
+0 and 1
+0 and 2
+0 and 3
+0 and 4
+1 and 0
+1 and 1
+1 and 2
+1 and 3
+1 and 4
+2 and 0
+2 and 1
+2 and 2
+2 and 3
+2 and 4
+3 and 0
+3 and 1
+3 and 2
+3 and 3
+3 and 4
+4 and 0
+4 and 1
+4 and 2
+4 and 3
+4 and 4
+
+In the first iteration of the loop, the index 0 and 0 is printed, the index 0 and 1 is printed next, the index 0 and 2 is printed next, the index 0 and 3 is printed next, the index 0 and 4 is printed last.
+In the second iteration of the outer loop, the index 1 and 0 is printed, the index 1 and 1 is printed next, on and on.
+You can see we have access to two numbers in each iteration of the loop?
+We can now use these two indexes to do the summing and get our two numbers.
+
+The below codes demonstrates that:
+
+prices = [30, 10, 40, 70, 60]
+  
+--for i in range(len(prices)):
+--    for j in range(len(prices)):
+--        if (prices[i] + prices[j] == 100):
+              print(f"{prices[i]} and {prices[j]}")
+~       
+You should get the below output:
+
+30 and 70
+40 and 60
+70 and 30
+60 and 40
+
+We got the correct output, but there is an issue, the output was duplicated. How do we solve this?
+First of all, we need to understand why this is happening.
+So why is this happeneing?
+Well, lets postulate.
+30 has index 0, 70 has index 3
+40 has index 2, 60 has index 4
+The output 30 and 70 was prioduced in the first iteration of the loop, the output 70 and 30 was produced in the third iteration of the loop.
+The output 30 and 70 was produced when the outer loop was in its first iteration and the inner loop was in its fourth iteration. 
+The output 70 and 30 was produced when the outer loop was in its fourth interation and the inner loop was in its first iteration.
+
+If you look at the below, a 0 and 1 will be printed, a 1 and 0 will also be printed, a 0 and 2 will be printed, a 2 and 0 will also be printed, a 0 and 3 will be printed, a 3 and 0 will also be printed, a 0 and 4 is printed, a 4 and 0 is also printed. 
+
+0 and 0
+0 and 1
+0 and 2
+0 and 3
+0 and 4
+1 and 0
+1 and 1
+1 and 2
+1 and 3
+1 and 4
+2 and 0
+2 and 1
+2 and 2
+2 and 3
+2 and 4
+3 and 0
+3 and 1
+3 and 2
+3 and 3
+3 and 4
+4 and 0
+4 and 1
+4 and 2
+4 and 3
+4 and 4
+
+If we want to skip the printing of 1 and 0, 2 and 0, 3 and 0 and 4 and 0, all we need to do is configure the loop as below which effectively solves the problem of repeating outputs:
+
+prices = [30, 10, 40, 70, 60]
+  
+--for i in range(len(prices)):
+      for j in range(i + 1, len(prices)):
+--        if (prices[i] + prices[j] == 100):
+              print(f"{prices[i]} and {prices[j]}")
+~                  
+
+
