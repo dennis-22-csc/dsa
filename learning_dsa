@@ -262,6 +262,20 @@ The below is one of them
 This solution is based on the insight that you can just in the for loop get the complement of each number in the list and check if the complement is inside the list.
 This is more efficient that running an inner loop.
 
-Now, the requirement of the two sum problem is for us to get the index of the two numbers,while the first approach can easily be tweaked to get the index of the two numbers, the second approach will need more work.
+You will still experience the problem of duplicate output. 
+Todo: explore how it can be solved
 
+Now, the requirement of the two sum problem is for us to get the index of the two numbers,while the first approach can easily be tweaked to get the index of the two numbers, the second approach will need more work. A dictionary will need to be introduced in the second approach.
+The logic is that since we want to match a value in the list with its complement while returning their index if they match, we will introduce a dictionary that will only hold one value at a time. The interesting thing about this dictionary is that the value in the dictionary will be the index of the value currently being iterated on in the list, while the index of the dictionary will be the value currently being iterated on. If you try to reverse things, you will see why it needs to be that way. 
 
+prices = [30, 10, 40, 70, 60]
+  prices_dict = {}
+--for i in range(len(prices)):
+      complement = 100 - prices[i]
+      prices_dict[prices[i]] = i
+      if complement in prices_dict:
+          print(f"{i} and {prices_dict[complement]}")
+~        
+
+Challenge:
+You're creating a fintech app for investments. You want to make it possible for an investor to optimize their investment portfolio by finding pairs of investments with specific characteristics. For example, to find two stocks whose combined prices match a target value, can you see the problem being a two sum problem?
