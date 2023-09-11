@@ -247,3 +247,21 @@ prices = [30, 10, 40, 70, 60]
 ~                  
 
 
+Part 2
+While we've seen a solution that works, the solution is not efficient.
+At least, there are more efficient solutions.
+The below is one of them
+
+  prices = [30, 10, 40, 70, 60]
+  
+  for price in prices:
+--    complement = 100 - price
+      if complement in prices:
+          print(f"{price} and {complement}")
+~                             
+This solution is based on the insight that you can just in the for loop get the complement of each number in the list and check if the complement is inside the list.
+This is more efficient that running an inner loop.
+
+Now, the requirement of the two sum problem is for us to get the index of the two numbers,while the first approach can easily be tweaked to get the index of the two numbers, the second approach will need more work.
+
+
