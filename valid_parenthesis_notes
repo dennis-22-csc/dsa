@@ -1,0 +1,164 @@
+When designing a compiler, you will need to parse the codes to be written by users to check if they contain valid parentheses. 
+At least, for some programming languages.
+If you ever need to parse a set of input to see if they contain valid parentheses, then knowledge of the valid parentheses DSA problem  can be applied.
+How can we check an input string to see if it contains valid parentheses?
+Well, what are valid parentheses and what are invalid parentheses?
+
+The following are valid parentheses:
+[], {}, <>, ()
+
+The following are invalid parentheses
+[}{)<](>
+
+An invalid parentheses is a parenthese that doesn't have the correct pair or that doesn't even have a pair.
+
+Now that we know what valid and invalid parentheses are, how do we check if a string contains or doesn't contain them?
+
+First of all, we know we will be looping through the string.
+In case you don't know now, know that in python and programming in general, you can iterate through a string. 
+What approach can we use to determine the validity?
+First of all, we will be checking each character in the string against the next character. We can determine validity by checking a particular character against a corresponding character in a dictionary. 
+We have already been exposed to the use of a dictionary. Can we have a dictionary storing the parentheses together with their peers?
+We can. 
+
+Well, when I wrote the below, I wasn't getting the expected output:
+
+text1 = "(){}[]"
+--text2 = ")()[]"
+  
+  par_dict = {"(": ")", "{": "}", "[": "]", "<": ">"}
+--def check_validity(text):
+      for i in range(len(text)):
+          if i + 1 == len(text) - 1:
+              break
+          if text[i + 1] not in par_dict.values():
+--            return(text[i+1])
+      return True
+  
+  print(check_validity(text1))
+
+
+The function is returning the character { and thats expected. { is not a value in the dictionary. It is instead a key.
+
+By writing this code, it means I don't fully understand how to use lists and dictionaries as a way to ensure we can have two elements of the same data structure in an iteration of a loop yet.
+
+Let's reason it out.
+We want it that we will check the first character in the string, if it is an opening character, we move to the next character in the string, if it isn't an opening character, the string is invalid. Now, if we've moved to the next character in the string, we check that it is a closing character. If it is a closing character, we move to the next character, if it isn't, the string is invalid. If we move to the next characte, we check that it is an opening character. If it is, the string is valid, if it is not, the string is invalid. We then move to the next character to see if it is a closing charcater. 
+
+Since we will be alternating between checking for two characters, my hunch is telling me we should define two separate lists. One to hold all the closing characters, another to hold all the opening characters. 
+While this is one aspect of solving the problem, it doesn't fully solve the problem.
+We are still likely to need to delete characters from the string, characters we've traversed.
+But lets assume, you make the check for the first character by checking to see if it is in the opening list, and you delete it, how do you check if the next character is in the closing list?
+Well, we will be checking for both characters at the same time so we can delete the pair.
+Why can't we just check for pairs in each ietration of the loop?
+Something like: If the current pair is equal to this pair or that pair or that pair, continue, else return false.
+Trust me, one reason why this solution quickly became obvious is because I've been exposed to this kind of solution before back when I was learning DSA. But then, I'm not currently looking at it so I can't say my thinking is in line with the solution.
+But let me write some codes.
+
+After a lot of trial and error, I produced the below code:
+
+text1 = "(){}[]"
+text2 = ")()[]"
+text3 = ")"
+text4 = ''
+
+def check_validity(text):
+    parans = ["()", "{}", "[]"]
+    i = 0
+    if len(text) < 2:
+        return False
+    while i < len(text):
+        if i > len(text) - 2:
+            break
+        if text[i] + text[i+1] in parans:
+            i += 2
+            continue
+        return False
+
+    return True
+
+print(check_validity(text1)) # True
+print(check_validity(text2)) # False
+print(check_validity(text3)) # False
+print(check_validity(text4)) # False
+
+It solves the problem.
+In the final code, I defined a list containing the pairs and check if each iterated pair is in the list. That approach is neater than checking for equality of strings.
+I also solved some problems I wouldn't have thought of if I didn't get my hands dirty with codes.
+Such as index out of range exceptions, managing the edge case of an empty string or a string with a single curly brace is passed.
+
+We've solved the valid parenthesis leetcode problem using one approach, what other approaches can be used?
+Rather looking for other approaches for the sake of other approaches, we will look for other approaches in the context of searching for an approach that has a lesser time complexity and/or space complexity.
+But before we can do all of that, what is the time and space complexity of the current approach?
+Let's analyse each line/block of code.
+The first two lines of code initialize and store value in variables.
+These operations are carried out once in the life of the algorithm. They take constant time and space complexity.
+The third code is a block of code. The block is excuted only once in the life of the algorithm. It takes a constant time and space complexity.
+The fourth code is a block of code. This code is executed for each two characters in a string. The time it takes for this code to complete its execution depends on the length of the string. The code therefore takes linear time complexity.
+Inside the block are other blocks of code that take linear time.
+
+The algorithm therefore takes linear time complexity O(n) and constant space complexity O(1). 
+But know that depending on what string is passed, the actual time complexity canbe less than O(n). This is because O(n) implies that all the characters in the string are iterated through. That won't be the case if the loop encouters an invalid character at the beginning of a long string.
+
+
+Now, is there an approach that takes a constant time complexity?
+It will be interesting to find out.
+But know that there are other approaches to solving the problem.
+
+Now, we've solved the valid parenthesis leetcode problem, but we havent actually solved the problem of parsing the codes or statements to see if they contain valid parenthesis. 
+The input to the valid parenthesis function is supposed to be something like: "(num > 2)", "if (num > 2){}".
+To get this, we first of all need to solve the problem of finding the parentheses in the string, that is extracting the parentheses in the string and perhaps putting them in a list.
+Extracting parentheses from a string is not hard. But further rules need to be defined toensure that the code contains valid parentheses. Because the code "if(num () ){}"  doesn't contain valid parentheses. There is an errorneous parentheses introduced in the code. 
+But let's leave this sort of challenge for when we're really creating a compiler or interpreter and focus on the objective of integrating extracting parentheses with the code of determining the validity of the parentheses.
+
+After some trial and error, I produced the below code:
+
+text1 = "if(num > 1){}"
+text2 = "if(num > 1)if"
+text3 = "if(num > 1)}{"
+text4 = "if(num > 1)("
+
+def check_validity(text):
+    parans1 = ["(", ")", "{", "}", "[", "]"]
+    parans2 = ["()", "{}", "[]"]
+    pair = ''
+    i = 0
+    validity_count = 0
+
+    if len(text) < 2:
+        return False
+    while i < len(text):
+        if text[i] in parans1:
+            pair += text[i]
+            if len(pair) > 1:
+                if pair in parans2 and i == len(text) - 1:
+                    return True
+                if pair in parans2:
+                    pair = ''
+                    validity_count += 1
+                    i += 1
+                    continue
+                return False
+        elif text[i] not in parans1 and i == len(text) - 1 and validity_count > 0:
+            return True
+        i += 1
+
+    return False
+
+print(check_validity(text1)) # True
+print(check_validity(text2)) # True
+print(check_validity(text3)) # False
+print(check_validity(text4)) # False
+
+It works.
+
+
+
+
+
+
+
+
+
+
+
