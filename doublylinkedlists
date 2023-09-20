@@ -1,0 +1,101 @@
+Next, we look at doubly linked list.
+What is a doubly linked list and how is it different from a singly linked list?
+Well, a doubly linked list is a linked list whose nodes not only contain the address of the next node, but also contain the address of the previous node. 
+Consequently, a doubly linkedlist can be traversed in forward and backward directions. Whereas, a singly linkedlist can only be traversed in forward direction.
+Next, let's define the Node class for a doubly Linkedlist, then we will define the DoublyLinkedList class itself.
+
+class Node:
+    def __init__(self, node_data, previous_node = None, next_node = None):
+        self.node_data = node_data
+        self.previous_node = previous_node
+        self.next_node = next_node
+
+# Test
+node1 = Node(23)
+print(node1.node_data)
+print(node1.previous_node)
+print(node1.next_node)
+
+With the above codes, we've got a working Node class that can be used to construct node objects for a doubly linked list.
+Next, we create the DoublyLinkedList class.
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.current_node = None
+        self.previous_node = None
+        self.next_node = None
+
+Next, we will create the add method. This method will be used to add data to the list. The method will take a data argument, internally create the relevant nodes, and the store the required data.
+What will be the logic of such a method?
+First of all, the first time the method is called, its data should be added to the current node, the previous and next node properties should be left alone.
+The next time the method is called, its data should be added to the current node. The existing node should be added to the previous node property of the current node. The current node should be added to the next node property of the existing node.
+This provides the general outline of how the method should operate.
+Let's translate this to code.
+
+class Node:
+    def __init__(self, node_data, previous_node = None, next_node = None):
+        self.node_data = node_data
+        self.previous_node = previous_node
+        self.next_node = next_node
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.current_node = None
+        self.previous_node = None
+        self.next_node = None
+
+    def add(self, node_data):
+        if self.current_node is None:
+            self.current_node = Node(node_data)
+            return
+        temp_node = self.current_node
+        self.current_node = Node(node_data, temp_node)
+        temp_node.next_node = self.current_node
+
+# Test
+mylist = DoublyLinkedList()
+mylist.add(20)
+mylist.add(90)
+mylist.add(40)
+mylist.add(10)
+
+# Print using previous node
+print("Print using previous node")
+print(mylist.current_node.node_data)
+while mylist.current_node.previous_node:
+    print(mylist.current_node.previous_node.node_data)
+    mylist.current_node = mylist.current_node.previous_node
+
+# Print using next node
+print("Print using next node")
+print(mylist.current_node.node_data)
+while mylist.current_node.next_node:
+    print(mylist.current_node.next_node.node_data)
+    mylist.current_node = mylist.current_node.next_node
+
+
+Next, let's make the DoublyLinkedList class iterable and indexable.
+For the SinglyLinkedList class, I didn't try to understand the codes that was used to achieve it.
+Let me go study the codes. 
+Two methods were implemented for the purpose of making the SinglyLinkedList class iterable. The first is __iter__. The second is __next__.
+These are supposedly inherited methods that are being overriden.  What are they all about? 
+In the context of a custom object, for example, the DoublyLinkedList object, the inherited __iter__ method needs to be implemented to return the DoublyLinkedList object as an iterator.
+All that's needed to be written is the below:
+
+def __iter__(self):
+        return self
+
+On writing this code, my linter throws a non iterator returned error. Will the interpreter do the same? There is only one way to find out.
+When I ran the codes, the interpreter didn't.
+Next, I'm to implement the __next__ method. This method will return the next node in the list.
+No, the method returns the data of the current node while pointing the current node to the next node. 
+
+def __next__(self):
+        if self.current_node is None:
+            raise StopIteration
+        node_data = self.current_node.node_data
+        self.current_node = self.current_node.previous_node
+        return node_data
+
+On writing this code, my linter no longer throws a non iterator returned error for the __iter__ method. 
+
