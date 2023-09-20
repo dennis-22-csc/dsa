@@ -1,0 +1,95 @@
+We've created functions to insert elements at the beginning and end of a singly linked list, how about a function that inserts an element at any index in a singly linked list given an index?
+How can we insert an element to a singly linked list using an index?
+Well, if we will be using indexes, it means we will be shifting one of the nodes, if not two.
+Let's see how it will goes.
+At the moment, I can iterate through the list which means I can count the number of elements in the list.
+While counting, if the count matches the index, I can change the next_node of the currently iterated node to that of the node to be inserted. Then the next node of the node to be inserted will be the previous next node of the currently iterated node.
+Interesting. 
+Let me be more specific. 
+Assume I want to insert 34 in the index 2, I'll iterate through each node in the list starting from the current and working backwards. 
+Let's assume the current count of nodes is 5, to insert the element at index 2, I need to only count two nodes backwards. That is, current node, the node after it, and the node after that node. This means the count needs to be 3. When the count is 3, it means I've iterated two nodes backwards excluding the current node. When we iterate the current node, the count is still 5.
+
+I managed to come up with the below code:
+
+def add_at_index(self, node_data, index):
+        temp_count = 1
+        temp_node = self.node
+        if index < 0 or index >= self.count:
+            raise IndexError("Index out of range")
+        while temp_node.next_node:
+            if index == temp_count:
+                temp_node.next_node = Node(node_data, temp_node.next_node)
+                return
+            temp_node = temp_node.next_node
+            temp_count += 1
+        temp_node.next_node = Node(node_data, temp_node.next_node)
+
+Note: I didn't work backward. I worked forward. But the idea still remains.
+
+But there is a challenge. When 0 is specified as index, the data gets inserted in the next node rather than there being a swap of position. How do I get the current node to swap position with the new node?
+The new node needs to point to the current node and the current node will retain its next node.
+
+I modified the code to the below to solve the problem after trial and error:
+
+def add_at_index(self, node_data, index):
+        temp_count = 1
+        temp_node = self.node
+        if index < 0 or index > self.count:
+            raise IndexError("Index out of range")
+        while temp_node.next_node:
+            if index == 0:
+                self.node = Node(node_data, self.node)
+                return
+            if index == temp_count:
+                temp_node.next_node = Node(node_data, temp_node.next_node)
+                return
+            temp_node = temp_node.next_node
+            temp_count += 1
+        temp_node.next_node = Node(node_data, temp_node.next_node)
+
+
+How do we delete an element from a singly linked list?
+First of all, the element exists as node and it only exists because it is inside the next_node property of another node. If we change the next_node property to the node that follows the node to be deleted, the node to be deleted ceases to exist. At least, in the linkedlist.
+
+The logic worked:
+
+def delete_at_index(self, index):
+        temp_count = 1
+        temp_node = self.node
+        if index < 0 or index >=self.count:
+            raise IndexError("Index out of range")
+        while temp_node.next_node:
+            if index == temp_count:
+                temp_node.next_node = temp_node.next_node.next_node
+                return
+            temp_node = temp_node.next_node
+            temp_count += 1
+        temp_node.next_node = temp_node.next_node.next_node
+
+But I'm yet to figure out how to delete the element at index 0. That is, the current node. The last inserted node.
+I wrote some code and I was getting some none type error for next_node.
+Let me check to see the value in the next_node property of the current node.
+It contained a Node object. I knew it will contain a Node object since it is the start of the iteration. Where then is the None error coming from?
+Let me run the delete method without trying to print the list items.
+Wow. I wrote the same code and because I added a return after the block of code deleting element at index 0, I no longer experienced the None type error.
+
+The below code works:
+
+def delete_at_index(self, index):
+        temp_count = 1
+        temp_node = self.node
+        if index < 0 or index >=self.count:
+            raise IndexError("Index out of range")
+        while temp_node.next_node:
+            if index == 0:
+                self.node = self.node.next_node
+                return
+            if index == temp_count:
+                temp_node.next_node = temp_node.next_node.next_node
+                return
+            temp_node = temp_node.next_node
+            temp_count += 1
+        temp_node.next_node = temp_node.next_node.next_node
+
+---
+

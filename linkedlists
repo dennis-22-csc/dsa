@@ -92,27 +92,26 @@ class Node:
         self.next_node = next_node
 
 # Tester codes
-node5 = Node(20, None) # Create node object
-print(node5.data) # Print data in node object
-print(node5.next_node) # Print address of next node object
-
-node4 = Node(70, node5) # Create node object
-print(node4.data) # Print data in node object
-print(node4.next_node) # Print address of next node object
-
-node3 = Node(10, node4) # Create node object
-print(node3.data) # Print data in node object
-print(node3.next_node) # Print address of next node object
-
-node2 = Node(50, node3) # Create node object
-print(node2.data) # Print data in node object
-print(node2.next_node) # Print address of next node object
-
-node1 = Node(90, node2) # Create node object
+node1 = Node(20, None) # Create node object
 print(node1.data) # Print data in node object
 print(node1.next_node) # Print address of next node object
 
-If you look at how the tester codes were modified, you will see that the first data to be stored was stored in the last node which is the fifth node. This is necessary because if it is stored in the first node, we won't be able to pass alongside the data the address of the next node. This is because the next node has not been created yet. We can't create the next node (second node) without creating the third node. So, the logical way to implement the connection is to store the first data in the fifth node.
+node2 = Node(70, node1) # Create node object
+print(node2.data) # Print data in node object
+print(node2.next_node) # Print address of next node object
+
+node3 = Node(10, node2) # Create node object
+print(node3.data) # Print data in node object
+print(node3.next_node) # Print address of next node object
+
+node4 = Node(50, node3) # Create node object
+print(node4.data) # Print data in node object
+print(node4.next_node) # Print address of next node object
+
+node5 = Node(90, node4) # Create node object
+print(node5.data) # Print data in node object
+print(node5.next_node) # Print address of next node object
+
  
 At this point, we've implemented a node and we've also modified the node such that it will include a reference to the next node, next, we need to create a LinkedList object.
 This object is an object that will comprise of node objects each of which contains data and a reference to the next node in the list.
@@ -262,13 +261,122 @@ print(mylist[4])
 Implementing the __iter__() and __next__() methods makes the list iterable, while implementing the  __getitem__() method makes the list items accessible using index, that is indexable.
 
 
+If you look closely at the implementation of the add method, it adds a new data to the beginning of the list. This means when printing data from the list, the last added data will be the first printed data. How do we define a method that adds new data to the end of the list so that when the data is printed, the first added data will be the first printed data?
+
+What are we trying to achieve here?
+In the current implementation, the first node to be created will be created with the None value passed as its next_node property.
+Now, we need a way to ensure that when we are creating the second node, the next_node property of the first node is changed to the address of the second node, while the next_node property of the second node(current node) is designated as None.
+How do we accomplish this?
+Let's see.
+
+The below implements the logic:
+
+def add_last(self, node_data):
+        self.count += 1
+        if self.count <= 1:
+            self.node = Node(node_data, None)
+        else:
+            self.current_node = Node(node_data, None)
+            self.node.next_node = self.current_node
+
+With this implementation, the next_node value of the head node will be replaced each time the add_last method is called. The last time it is called, it is the address of the current node that will be there and the current node is the last data to be inserted.
+This will ensure only the first and last data is printed and not the data in between.
+The data of the head node has not changed. Only the next_node addresses changes. 
+
+Integrate the method and test it using the below:
+
+# Tester codes
+mylist = SinglyLinkedList()
+mylist.add_last(20)
+mylist.add_last(90)
+mylist.add_last(40)
+mylist.add_last(10)
+
+print(mylist.node.data)
+
+node2 = mylist.node.next_node
+print(node2.data)
+
+node3 = node2.next_node
+print(node3.data)
 
 
+The first and last data to be inserted will be printed, then you will get an exception.
+
+For this particular problem, I had to look up a solution.
+The problem was solved using an understanding of traversing a linkedlist.
+I didn't understand the linkedlist I created using those tester codes can be traversed as demonstrated below:
+
+# Create class Node
+class Node:
+    def __init__(self, data, next_node):
+        self.data = data
+        self.next_node = next_node
+
+# Tester codes
+node1 = Node(20, None)
+node2 = Node(70, node1)
+node3 = Node(10, node2)
+node4 = Node(50, node3)
+node5 = Node(90, node4)
+
+temp_node = node5
+while temp_node.next_node:
+    print(temp_node.data)
+    temp_node = temp_node.next_node
+print(temp_node.data)
+
+Create a file node.py and test the codes.
+All the data in the linkedlist will be printed.
+Now, what this teaches is that you can use the current node to get to the last node and when you get to the last node, you can change the next_node property to point to a value other than None.
+
+Why is temp_node introduced?
+Let's see what would happen when it is not introduced.
+
+# Create class Node
+class Node:
+    def __init__(self, data, next_node):
+        self.data = data
+        self.next_node = next_node
+
+# Tester codes
+node1 = Node(20, None)
+node2 = Node(70, node1)
+node3 = Node(10, node2)
+node4 = Node(50, node3)
+node5 = Node(90, node4)
+
+while node5.next_node:
+    print(node5.data)
+    node5 = node5.next_node
+print(node5.data)
+
+Nothing happended. All the data were printed.
+
+So now, how do we ensure that when we are creating the second node(current node), the next_node property of the first node(previous node) is changed from None to point to the second node(current node) while ensuring that the next_node property of the second node(current node) points to None?
+Well, by traversing the linkedlist inside the add_last method until we get to the node whose next_node property is None. 
+When we get to the node, we will now change the value assigned to its next_node property by assigning the current node (The node whose next_node property will point to None) to it.
+
+The below will be the created function:
+
+def add_last(self, node_data):
+        self.count += 1
+        if self.count <= 1:
+            self.node = Node(node_data, None)
+        else:
+            temp_node = self.node
+            # while temp_node.next_node is not None, switch to next node
+            while temp_node.next_node:
+                temp_node = temp_node.next_node
+            # when temp_node.next_node is None, change next_node
+            temp_node.next_node = Node(node_data, None)
 
 
-
-
-
+Why is temp_node introduced? Why can't self.node be directly used?
+The thing is the while loop will change the address of self.node to become the address of the node whose next_node property was None.
+When this address is changed everytime the add_last method is called, the last time it is called, self.node will point to the address of the node whose next_node property was last None, then the next_property of self.node will point to the node whose next_node property is None. This mean when you try to print the list, only two nodes will be printed no matter how many nodes were created.
+But by introducing a temp_node, we can arrive at the node whose next_node property is None without changing the address of next_node, assign the node to temp_node and whatever we assihgn to temp_node becomes the new value of self.node. Pointers at work.
+You can use a pointer to an object to change the value of the object without changing the address of the object. Temp node is a pointer to the object self.node.
 
 
 
