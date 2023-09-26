@@ -7,63 +7,69 @@ class Node:
 # Create class SinglyLinkedList
 class SinglyLinkedList:
     def __init__(self):
-        self.node = None
         self.current_node = None
         self.count = 0
 
     def add(self, node_data):
         self.count += 1
         if self.count <= 1:
-            self.node = Node(node_data, None)
+            new_node = Node(node_data, None)
+            self.current_node = new_node
         else:
-            self.node = Node(node_data, self.node)
+            new_node = Node(node_data, self.current_node)
+            self.current_node = new_node
 
     def add_last(self, node_data):
         self.count += 1
         if self.count <= 1:
-            self.node = Node(node_data, None)
+            new_node = Node(node_data, None)
+            self.current_node = new_node
         else:
-            temp_node = self.node
-            # while temp_node.next_node is not None, switch to next node
-            while temp_node.next_node:
-                temp_node = temp_node.next_node
-            # when temp_node.next_node is None, change next_node
-            temp_node.next_node = Node(node_data, None)
+            current_node = self.current_node
+            # while current_node.next_node is not None, switch to next node
+            while current_node.next_node:
+                current_node = current_node.next_node
+            # when current_node.next_node is None, change next_node to new node
+            new_node = Node(node_data, None)
+            current_node.next_node = new_node
 
     def add_at_index(self, node_data, index):
         temp_count = 1
-        temp_node = self.node
+        current_node = self.current_node
         if index < 0 or index > self.count:
             raise IndexError("Index out of range")
-        while temp_node.next_node:
+        while current_node.next_node:
             if index == 0:
-                self.node = Node(node_data, self.node)
+                new_node = Node(node_data, self.current_node)
+                self.current_node = new_node
                 return
             if index == temp_count:
-                temp_node.next_node = Node(node_data, temp_node.next_node)
+                new_node = Node(node_data, current_node.next_node)
+                current_node.next_node = new_node
                 return
-            temp_node = temp_node.next_node
+            current_node = current_node.next_node
             temp_count += 1
-        temp_node.next_node = Node(node_data, temp_node.next_node)
+        new_node = Node(node_data, current_node.next_node)
+        current_node.next_node = new_node
 
     def delete_at_index(self, index):
         temp_count = 1
-        temp_node = self.node
+        current_node = self.current_node
         if index < 0 or index >=self.count:
             raise IndexError("Index out of range")
-        while temp_node.next_node:
+        while current_node.next_node:
             if index == 0:
-                self.node = self.node.next_node
+                new_node = self.current_node.next_node
+                self.current_node = new_node
                 return
             if index == temp_count:
-                temp_node.next_node = temp_node.next_node.next_node
+                current_node.next_node = current_node.next_node.next_node
                 return
-            temp_node = temp_node.next_node
+            current_node = current_node.next_node
             temp_count += 1
-        temp_node.next_node = temp_node.next_node.next_node
+        current_node.next_node = current_node.next_node.next_node
 
     def __iter__(self):
-        self.current_node = self.node
         return self
 
     def __next__(self):
@@ -78,7 +84,7 @@ class SinglyLinkedList:
         if index < 0 or index >= self.count:
             raise IndexError("Index out of range")
 
-        current_node = self.node
+        current_node = self.current_node
         for _ in range(index):
             current_node = current_node.next_node
 
@@ -86,15 +92,15 @@ class SinglyLinkedList:
 
 # Tester codes
 mylist = SinglyLinkedList()
-mylist.add(20)
-mylist.add(90)
-mylist.add(40)
-mylist.add(10)
-mylist.delete_at_index(0)
-
+mylist.add_last(20)
+mylist.add_last(90)
+mylist.add_last(40)
+mylist.add_last(10)
+#mylist.delete_at_index(0)
+print(mylist.current_node.data)
 # Test that the list is iterable
-for i in mylist:
-    print(i)
+#for i in mylist:
+    #print(i)
 
 # Test that the list is indexable
 #print(mylist[3])
