@@ -1,0 +1,188 @@
+Circular Linked List
+The third category of Linked list is the circular linked list.
+From what I've read, a circular linked list can be a circular singly linked list or a circular doubly linked list.
+What makes a linked list whether singly or doubly to be circular is when the last inserted node points to the first inserted node.
+Take a singly linked list and make the last node point to the first node and you have a circular singly linked list.
+Take a doubly linked list and make the last node point to the first node and you have a circular doubly linked list.
+
+What are the important operations implemented in a circular linked list?
+Insertion
+Deletion
+Iteration
+
+Let's create a circular singly linked list and see how we can implement each of these operations.
+
+The below creates the relevant classes:
+
+class Node:
+    def __init__(self, node_data, next_node=None):
+        self.node_data = node_data
+        self.next_node = next_node
+
+class CircularSinglyLinkedList:
+    def __init__(self):
+        self.current_node = None
+        self.next_node = None
+        
+Next, we will define the add method. This methods inserts an element to the list.
+How different will this method be to that of the normal singly linked list?
+I can't say until I write some codes.
+I've written some codes. I now have much clarity.
+When we insert the first node, next node will be None.
+When we insert the second node, we need to not only make the next node of the current node (first node) to point to the second node (new node), we also need to make the next node of the second node (new node) to point to the first node (current node).
+When we insert the third node, we need to not only make the next node of the current node(second node) to point to the third node (new node), we also need to make the third node (new node) to point to the first node. The address of the first node is the current next node of the current node(second node).
+
+Wrote the below codes to implement this train of thought:
+
+class Node:
+    def __init__(self, node_data, next_node=None):
+        self.node_data = node_data
+        self.next_node = next_node
+
+class CircularSinglyLinkedList:
+    def __init__(self):
+        self.current_node = None
+        self.next_node = None
+        self.count = 0
+
+    def add(self, node_data):
+        if self.count == 0:
+            new_node = Node(node_data)
+            self.current_node = new_node
+            self.count += 1
+            return
+        if self.count == 1:
+            current_node = self.current_node
+            new_node = Node(node_data, current_node)
+            current_node.next_node = new_node
+            self.current_node = new_node
+            self.count += 1
+            return
+        current_node = self.current_node
+        new_node = Node(node_data, current_node.next_node)
+        current_node.next_node = new_node
+        self.current_node = new_node
+        self.count += 1
+
+# Tester codes
+mylist = CircularSinglyLinkedList()
+mylist.add(20)
+mylist.add(90)
+mylist.add(40)
+mylist.add(10)
+
+node1 = mylist.current_node
+node2 = node1.next_node
+node3 = node2.next_node
+node4 = node3.next_node
+
+print(node1.node_data)
+print(node2.node_data)
+print(node3.node_data)
+print(node4.node_data)
+
+While it works, it doesn't produce the results in the correct order.
+When I run the codes, I get the output in the following order: 
+10
+20
+90
+40
+
+Current node is correctly 10, but the next node of current node should be 40 not 20.
+Why is this the result?
+The asnwer is in the add method.
+Oh. It's producing the result how it should produce it. I got the result because of the below code:
+
+node1 = mylist.current_node
+node2 = node1.next_node
+node3 = node2.next_node
+node4 = node3.next_node
+
+I printed the data from the current node(last inserted node). The next node of the last inserted node is the first node which contains the value 20. The next node of the node is that which contained the value 90. 
+So you can see why the data is displayed in that order.
+I guess we've implemented the add method. Now let's make the class iterable.
+But before that, let's test that the list is a circular list. 
+If it is a circular list, there will be a node 5 and many more nodes. The nodes won't have an end.
+The node will keep circling back.
+If you integrate the below with the codes, you will see the list is a circular list:
+
+node1 = mylist.current_node
+node2 = node1.next_node
+node3 = node2.next_node
+node4 = node3.next_node
+node5 = node4.next_node
+node6 = node5.next_node
+node7 = node6.next_node
+
+print(node1.node_data)
+print(node2.node_data)
+print(node3.node_data)
+print(node4.node_data)
+print(node5.node_data)
+print(node6.node_data)
+print(node7.node_data)
+
+Now let's make the class iterable.
+Just like for the first two categories of linked list, we will be implementing the __iter__ and the __next__ methods.
+While I remember how the __iter__ method is implemented, I don't remember how the __next__ method is implemented. Does it have a parameter other than self? Well, I could find out through trial and error rather than looking it up.
+At least, I know the function returns the node data of the current node. I also know the function swithces the current node.
+I wrote the below, it didnt work:
+
+def __iter__(self):
+        return self
+
+    def __next__(self):
+        count = 0
+        while self.current_node.next_node:
+            if count == self.count:
+                break
+            count += 1
+            self.current_node = self.current_node.next_node
+        return self.current_node.node_data
+
+I've looked up the implementation in the singly linked list.
+Mistake: Introducing a loop. Seems the __next__ method is already a loop. 
+All I need to do is increment the node by assinging the next_node address to the current_node variable.
+But how do I now solve the problem of exiting the loop?
+You can as well, leave the implementation of the count increment.
+The class is now iterable but the code to break out of the loop is not working:
+
+def __next__(self):
+        count = 0
+        if count == self.count:
+            raise StopIteration
+        count += 1
+        self.current_node = self.current_node.next_node
+        return self.current_node.node_data
+
+I had to turn to ChatGPT to get working code. Even ChatGPT didn't get it right the first time.
+The below is the working code:
+
+def __iter__(self):
+        self.head_node = self.current_node
+        return self
+
+    def __next__(self):
+        if not self.head_node:
+            raise StopIteration
+
+        self.current_node = self.current_node.next_node
+
+        if self.head_node == self.current_node:
+            self.head_node = None
+
+        return self.current_node.node_data
+
+The idea is that to have a break point, an head node is defined. The current node is made to be the head node.
+The a condition is defined that if the head node is none, the iteration should stop.
+To get the head node to become none, we will check if the current node is the head node. If it is, it means the circle has been completed.
+
+Now, if you observe the output, you will see that we are not done yet.
+In the output, the first value printed is 20.
+In the other implementations of the add method, it is the last inserrted data that is usually first printed.
+This ensures that the data is printed in reverse order starting from the last.
+Now, when I went back to the add method in the singly linked list class, I found out that the last inserted data is always the first data in the last and the second to the last will be the next and on and on.
+For the add_last method, internally, the current node will be swithced to the last node, the node whose next node is none, then the new node will be assigned as the next node of the node whose next node is none. The node whose next node is none is the last inserted data.
+Let's assume the data 20, 90, 40, and 10, when 90 is inserted, the last node will be 20. When 40 is inserted, the last node will be 90. When 10 is inserted, the last node will be 40. And when 10 is inserted, 
+
+

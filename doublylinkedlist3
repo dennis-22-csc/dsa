@@ -1,0 +1,502 @@
+We want to implement correctly the add_first and add_last methods for the DoublyLinkedList class.
+We will start with the below codes:
+ 
+class Node:
+    def __init__(self, data, previous_node=None, next_node=None):
+        self.data = data
+        self.previous_node = previous_node
+        self.next_node = next_node
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head_node = None 
+        
+Next, we will implement an add method.
+
+def add(self, data):
+        if not self.head_node:
+            new_node = Node(data)
+            self.head_node = new_node
+            return
+            
+Next, we will implement the add first method. Given a non empty list, the add_first method should add data at the beginning of the list.  That is, the node to be created by the method should be the new head node.  That head node will point to the previous head node while the previous head node will also point backward to the new head node.
+For the add_last method, given a non empty list, the method should replace the tail node with a new tail node. The new tail node will have a next node that points to none and a previous node that points to the existing tail node. The existing tail node will have a next node that points to the new tail node.
+
+class Node:
+    def __init__(self, data, previous_node=None, next_node=None):
+        self.data = data
+        self.previous_node = previous_node
+        self.next_node = next_node
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head_node = None
+
+    def add(self, data):
+        if not self.head_node:
+            new_node = Node(data)
+            self.head_node = new_node
+            return
+        self.add_last(data)
+
+    def add_first(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        old_head_node = self.head_node
+        new_head_node = Node(data, next_node=old_head_node)
+        old_head_node.previous_node = new_head_node
+        self.head_node = new_head_node
+
+    def add_last(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        temp_node = self.head_node
+        while temp_node.next_node:
+            temp_node = temp_node.next_node
+        old_tail_node = temp_node
+        new_tail_node = Node(data, previous_node=old_tail_node)
+        old_tail_node.next_node = new_tail_node
+
+mylist = DoublyLinkedList()
+mylist.add(90)
+mylist.add_first(20)
+mylist.add_last(40)
+mylist.add(10)
+
+node1 = mylist.head_node
+node2 = node1.next_node
+node3 = node2.next_node
+node4 = node3.next_node
+
+print(node1.data)
+print(node2.data)
+print(node3.data)
+print(node4.data)
+
+The class has been made iterable in the below:
+
+class Node:
+    def __init__(self, data, previous_node=None, next_node=None):
+        self.data = data
+        self.previous_node = previous_node
+        self.next_node = next_node
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head_node = None
+        self.current_node = None
+
+    def add(self, data):
+        if not self.head_node:
+            new_node = Node(data)
+            self.head_node = new_node
+            return
+        self.add_last(data)
+
+    def add_first(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        old_head_node = self.head_node
+        new_head_node = Node(data, next_node=old_head_node)
+        old_head_node.previous_node = new_head_node
+        self.head_node = new_head_node
+
+    def add_last(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        temp_node = self.head_node
+        while temp_node.next_node:
+            temp_node = temp_node.next_node
+        old_tail_node = temp_node
+        new_tail_node = Node(data, previous_node=old_tail_node)
+        old_tail_node.next_node = new_tail_node
+
+    def __iter__(self):
+        self.current_node = self.head_node
+        return self
+
+    def __next__(self):
+        if not self.current_node:
+            raise StopIteration
+        data = self.current_node.data
+        self.current_node = self.current_node.next_node
+        return data
+
+mylist = DoublyLinkedList()
+mylist.add(90)
+mylist.add_first(20)
+mylist.add_last(40)
+mylist.add(10)
+
+for i in mylist:
+    print(i)
+    
+Now, we will implement the delete_at_index method and the add_at_index method
+ The add_at_index method will be implemented in stages. For the first stage, we will define a while loop that will iterate through each node and check if the supplied index matches the index of the node before the node to be deleted. If it does, we will assign the new node to the next node property of the iterated node. We will as well assign the iterated node as the previous node of the new node. We will then assign the next node of the iterated node as the next node of the new node.   
+        
+class Node:
+    def __init__(self, data, previous_node=None, next_node=None):
+        self.data = data
+        self.previous_node = previous_node
+        self.next_node = next_node
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head_node = None
+        self.current_node = None
+
+    def add(self, data):
+        if not self.head_node:
+            new_node = Node(data)
+            self.head_node = new_node
+            return
+        self.add_last(data)
+
+    def add_first(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        old_head_node = self.head_node
+        new_head_node = Node(data, next_node=old_head_node)
+        old_head_node.previous_node = new_head_node
+        self.head_node = new_head_node
+
+    def add_last(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        temp_node = self.head_node
+        while temp_node.next_node:
+            temp_node = temp_node.next_node
+        old_tail_node = temp_node
+        new_tail_node = Node(data, previous_node=old_tail_node)
+        old_tail_node.next_node = new_tail_node
+
+    def add_at_index(self, data, index):
+        count = 1
+        temp_node = self.head_node
+        while temp_node.next_node:
+            if count == index:
+                new_node = Node(data, previous_node=temp_node, next_node=temp_node.next_node)
+                temp_node.next_node = new_node
+                return
+            temp_node = temp_node.next_node
+            count += 1
+
+    def __iter__(self):
+        self.current_node = self.head_node
+        return self
+
+    def __next__(self):
+        if not self.current_node:
+            raise StopIteration
+        data = self.current_node.data
+        self.current_node = self.current_node.next_node
+        return data
+
+mylist = DoublyLinkedList()
+mylist.add(90)
+mylist.add_first(20)
+mylist.add_last(40)
+mylist.add(10)
+mylist.add_at_index(100, 2)
+
+for i in mylist:
+    print(i)
+    
+The  next stage is when the supplied index is 0.
+If the supplied index is 0, the add_first method should be called.
+If the index is the same as the number of elements in the list, the add last method should be called.
+If the list is empty, that should be accounted for.
+If the supplied index is hihger than the number of elements in the list, that should be accounted for.
+The below demonstrates all of this:
+
+class Node:
+    def __init__(self, data, previous_node=None, next_node=None):
+        self.data = data
+        self.previous_node = previous_node
+        self.next_node = next_node
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head_node = None
+        self.current_node = None
+        self.count = 0
+
+    def add(self, data):
+        if not self.head_node:
+            new_node = Node(data)
+            self.head_node = new_node
+            self.count += 1
+            return
+        self.add_last(data)
+
+    def add_first(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        old_head_node = self.head_node
+        new_head_node = Node(data, next_node=old_head_node)
+        old_head_node.previous_node = new_head_node
+        self.head_node = new_head_node
+        self.count += 1
+
+    def add_last(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        temp_node = self.head_node
+        while temp_node.next_node:
+            temp_node = temp_node.next_node
+        old_tail_node = temp_node
+        new_tail_node = Node(data, previous_node=old_tail_node)
+        old_tail_node.next_node = new_tail_node
+        self.count += 1
+
+    def add_at_index(self, data, index):
+        if not self.head_node:
+            self.add(data)
+            return
+        if index == 0:
+            self.add_first(data)
+            return
+        if index == self.count:
+            self.add_last(data)
+            return
+        if index > self.count:
+            raise IndexError("Index out of range")
+        count = 1
+        temp_node = self.head_node
+        while temp_node.next_node:
+            if count == index:
+                new_node = Node(data, previous_node=temp_node, next_node=temp_node.next_node)
+                temp_node.next_node = new_node
+                self.count += 1
+                return
+            temp_node = temp_node.next_node
+            count += 1
+
+    def __iter__(self):
+        self.current_node = self.head_node
+        return self
+
+    def __next__(self):
+        if not self.current_node:
+            raise StopIteration
+        data = self.current_node.data
+        self.current_node = self.current_node.next_node
+        return data
+
+mylist = DoublyLinkedList()
+mylist.add(90)
+mylist.add_first(20)
+mylist.add_last(40)
+mylist.add(10)
+mylist.add_at_index(100, 2)
+mylist.add_at_index(200, 0)
+mylist.add_at_index(300, 6)
+#mylist.add_at_index(400, 8)
+
+for i in mylist:
+    print(i)
+    
+Finally, we will implement the delete_at_index method.
+When we arrive at the node before the node to be deleted, we will simply point its next node to the next node of its next node. We will also change the previous node of that next node to point to the iterated node.
+We will then implement for when index 0 is supplied, when the index matching the count is supplied, when the list is empty.
+
+def delete_at_index(self, index):
+        count = 1
+        temp_node = self.head_node
+        while temp_node.next_node:
+            if index == count:
+                temp_node.next_node = temp_node.next_node.next_node
+                temp_node.next_node.previous_node = temp_node
+                return
+            temp_node = temp_node.next_node
+            count += 1
+
+When index 0 is supplied, the head node should be removed from the chain. This is as simple as assigning the next node of the current head node as the new head node and changing the previous node of the new head node to point to none.
+
+def delete_at_index(self, index):
+        if index == 0:
+            self.head_node = self.head_node.next_node
+            self.head_node.previous_node = None
+            return
+        count = 1
+        temp_node = self.head_node
+        while temp_node.next_node:
+            if index == count:
+                temp_node.next_node = temp_node.next_node.next_node
+                temp_node.next_node.previous_node = temp_node
+                return
+            temp_node = temp_node.next_node
+            count += 1
+
+What if the index  supplied is the same as the number of elements in the list. That is, what if it's the tail node we want to delete?
+
+Based on the current implementation, by the time the while loop finishes executing, we would have reached the tail node. Which means we can no longer access the while loop. The deletion operation will need to be perofmred outside the while loop.
+We will make the previous node of the tail node to be the new tail node. Its next node will need to be changed to none.
+
+def delete_at_index(self, index):
+        if index == 0:
+            self.head_node = self.head_node.next_node
+            self.head_node.previous_node = None
+            return
+        count = 1
+        temp_node = self.head_node
+        while temp_node.next_node:
+            if index == count:
+                temp_node.next_node = temp_node.next_node.next_node
+                temp_node.next_node.previous_node = temp_node
+                return
+            temp_node = temp_node.next_node
+            count += 1
+        temp_node = temp_node.previous_node
+        temp_node.next_node = None
+        
+Next, let's implement for index out of bounds.
+In implementing for the out of bounds, I noticed if I supply the function with an index equal to the current count of indexes, I get a None type error. 
+
+def delete_at_index(self, index):
+        if index == 0:
+            self.head_node = self.head_node.next_node
+            self.head_node.previous_node = None
+            self.count -= 1
+            return
+        if index > self.count:
+            raise IndexError("Index out of bounds")
+        count = 1
+        temp_node = self.head_node
+        while temp_node.next_node:
+            if index == count and index != self.count - 1:
+                temp_node.next_node = temp_node.next_node.next_node
+                temp_node.next_node.previous_node = temp_node
+                self.count -= 1
+                return
+            temp_node = temp_node.next_node
+            count += 1
+        temp_node = temp_node.previous_node
+        temp_node.next_node = None
+        self.count -= 1
+
+The below is the final class
+
+class Node:
+    def __init__(self, data, previous_node=None, next_node=None):
+        self.data = data
+        self.previous_node = previous_node
+        self.next_node = next_node
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head_node = None
+        self.current_node = None
+        self.count = 0
+
+    def add(self, data):
+        if not self.head_node:
+            new_node = Node(data)
+            self.head_node = new_node
+            self.count += 1
+            return
+        self.add_last(data)
+
+    def add_first(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        old_head_node = self.head_node
+        new_head_node = Node(data, next_node=old_head_node)
+        old_head_node.previous_node = new_head_node
+        self.head_node = new_head_node
+        self.count += 1
+
+    def add_last(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        temp_node = self.head_node
+        while temp_node.next_node:
+            temp_node = temp_node.next_node
+        old_tail_node = temp_node
+        new_tail_node = Node(data, previous_node=old_tail_node)
+        old_tail_node.next_node = new_tail_node
+        self.count += 1
+
+    def add_at_index(self, data, index):
+        if not self.head_node:
+            self.add(data)
+            return
+        if index == 0:
+            self.add_first(data)
+            return
+        if index == self.count:
+            self.add_last(data)
+            return
+        if index > self.count:
+            raise IndexError("Index out of range")
+        count = 1
+        temp_node = self.head_node
+        while temp_node.next_node:
+            if count == index:
+                new_node = Node(data, previous_node=temp_node, next_node=temp_node.next_node)
+                temp_node.next_node = new_node
+                self.count += 1
+                return
+            temp_node = temp_node.next_node
+            count += 1
+
+    def delete_at_index(self, index):
+        if index == 0:
+            self.head_node = self.head_node.next_node
+            self.head_node.previous_node = None
+            self.count -= 1
+            return
+        if index > self.count:
+            raise IndexError("Index out of bounds")
+        count = 1
+        temp_node = self.head_node
+        while temp_node.next_node:
+            if index == count and index != self.count - 1:
+                temp_node.next_node = temp_node.next_node.next_node
+                temp_node.next_node.previous_node = temp_node
+                self.count -= 1
+                return
+            temp_node = temp_node.next_node
+            count += 1
+        temp_node = temp_node.previous_node
+        temp_node.next_node = None
+        self.count -= 1
+
+    def __iter__(self):
+        self.current_node = self.head_node
+        return self
+
+    def __next__(self):
+        if not self.current_node:
+            raise StopIteration
+        data = self.current_node.data
+        self.current_node = self.current_node.next_node
+        return data
+
+mylist = DoublyLinkedList()
+mylist.add(90)
+mylist.add_first(20)
+mylist.add_last(40)
+mylist.add(10)
+mylist.add_at_index(100, 2)
+mylist.add_at_index(200, 0)
+mylist.add_at_index(300, 6)
+#mylist.add_at_index(400, 8)
+mylist.delete_at_index(2) # 90
+mylist.delete_at_index(0) # 200
+mylist.delete_at_index(4) # 300
+#mylist.delete_at_index(5)
+
+for i in mylist:
+    print(i)
+    

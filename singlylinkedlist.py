@@ -9,6 +9,7 @@ class SinglyLinkedList:
     def __init__(self):
         self.current_node = None
         self.count = 0
+        self.temp_node = None
 
     def add(self, node_data):
         self.count += 1
@@ -25,13 +26,13 @@ class SinglyLinkedList:
             new_node = Node(node_data, None)
             self.current_node = new_node
         else:
-            current_node = self.current_node
+            self.temp_node = self.current_node
             # while current_node.next_node is not None, switch to next node
-            while current_node.next_node:
-                current_node = current_node.next_node
+            while self.temp_node.next_node:
+                self.temp_node = self.temp_node.next_node
             # when current_node.next_node is None, change next_node to new node
             new_node = Node(node_data, None)
-            current_node.next_node = new_node
+            self.temp_node.next_node = new_node
 
     def add_at_index(self, node_data, index):
         temp_count = 1
@@ -98,6 +99,7 @@ mylist.add_last(40)
 mylist.add_last(10)
 #mylist.delete_at_index(0)
 print(mylist.current_node.data)
+print(mylist.temp_node.data)
 # Test that the list is iterable
 #for i in mylist:
     #print(i)
