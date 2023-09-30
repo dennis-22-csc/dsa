@@ -1,0 +1,99 @@
+Linkedlist Leetcode problems(https://leetcode.com/tag/linked-list/)
+
+Insert 
+1. Populating Next Right Pointers in Each Node(https://leetcode.com/problems/populating-next-right-pointers-in-each-node) Medium 
+2. Populating Next Right Pointers in Each Node II(https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii) Medium 
+3. Insertion Sort List(https://leetcode.com/problems/insertion-sort-list) (Medium) 
+4. Insert into a Sorted Circular Linked List(https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list) Medium 
+
+Partition 
+1. Partition List(https://leetcode.com/problems/partition-list) Medium 
+2. Split Linked List in Parts(https://leetcode.com/problems/split-linked-list-in-parts) Medium 
+
+Sort 
+1. Reorder List(https://leetcode.com/problems/reorder-list) Medium 
+2. Sort List(https://leetcode.com/problems/sort-list) Medium 
+3. Sort Linked List Already Sorted Using Absolute Values(https://leetcode.com/problems/sort-linked-list-already-sorted-using-absolute-values) Medium 
+
+
+Merge 
+1. Merge Two Sorted Lists (https://leetcode.com/problems/merge-two-sorted-lists) Easy 
+2. Flatten a Multilevel Doubly Linked List(https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list) Medium 
+3. Merge In Between Linked Lists(https://leetcode.com/problems/merge-in-between-linked-lists) Medium 
+4. Merge Nodes in Between Zeros(https://leetcode.com/problems/merge-nodes-in-between-zeros) Medium 
+5. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists) Hard
+
+Copy 
+1. Copy List with Random Pointer(https://leetcode.com/problems/copy-list-with-random-pointer) Medium 
+
+Delete 
+1. Remove Linked List Elements(https://leetcode.com/problems/remove-linked-list-elements) Easy 
+2. Delete N Nodes After M Nodes of a Linked List(https://leetcode.com/problems/delete-n-nodes-after-m-nodes-of-a-linked-list) Easy 
+3. Remove Duplicates from Sorted List(https://leetcode.com/problems/remove-duplicates-from-sorted-list) Easy 
+4. Remove Nth Node From End of List (https://leetcode.com/problems/remove-nth-node-from-end-of-list) Medium
+5. Remove Duplicates from Sorted List (https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii) 
+Medium 
+6. Delete Node in a Linked List(https://leetcode.com/problems/delete-node-in-a-linked-list) Medium 
+7. Remove Zero Sum Consecutive Nodes from Linked List(https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list) Medium 
+8. Remove Duplicates From an Unsorted Linked List(https://leetcode.com/problems/remove-duplicates-from-an-unsorted-linked-list) Medium 
+9. Delete the Middle Node of a Linked List(https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list) 
+Medium 
+10. Remove Nodes From Linked List(https://leetcode.com/problems/remove-nodes-from-linked-list) Medium 
+
+Find
+1. Intersection of Two Linked Lists(https://leetcode.com/problems/intersection-of-two-linked-lists) Easy 
+2. Middle of the Linked List(https://leetcode.com/problems/middle-of-the-linked-list) Easy
+3. Linked List Cycle(https://leetcode.com/problems/linked-list-cycle) Easy 
+4. Palindrome Linked List(https://leetcode.com/problems/palindrome-linked-list) Easy 
+5. Linked List Cycle II(https://leetcode.com/problems/linked-list-cycle-ii) Medium 
+6. Linked List Random Node(https://leetcode.com/problems/linked-list-random-node) Medium 
+7. Next Greater Node In Linked List(https://leetcode.com/problems/next-greater-node-in-linked-list) Medium 
+8. Linked List Components(https://leetcode.com/problems/linked-list-components) Medium 
+9. Find the Minimum and Maximum Number of Nodes Between Critical Points(https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points) Medium 
+10. Maximum Twin Sum of a Linked List(https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list) Medium 
+
+Reverse 
+1. Reverse Linked List(https://leetcode.com/problems/reverse-linked-list) Easy 
+2. Swap Nodes in Pairs (https://leetcode.com/problems/swap-nodes-in-pairs) Medium 
+3. Rotate List (https://leetcode.com/problems/rotate-list) Medium 
+4. Reverse Linked List II(https://leetcode.com/problems/reverse-linked-list-ii) Medium 
+5. Swapping Nodes in a Linked List(https://leetcode.com/problems/swapping-nodes-in-a-linked-list) Medium
+6. Print Immutable Linked List in Reverse
+(https://leetcode.com/problems/print-immutable-linked-list-in-reverse) Medium 
+7. Reverse Nodes in Even Length Groups(https://leetcode.com/problems/reverse-nodes-in-even-length-groups) Medium 
+8. Reverse Nodes in k-Group (https://leetcode.com/problems/reverse-nodes-in-k-group) Hard
+
+Conversion 
+1. Convert Sorted List to Binary Search Tree(https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree) Medium 
+2. Flatten Binary Tree to Linked List(https://leetcode.com/problems/flatten-binary-tree-to-linked-list) Medium 
+3. Convert Binary Search Tree to Sorted Doubly Linked List(https://leetcode.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list) Medium
+4. Linked List in Binary Tree(https://leetcode.com/problems/linked-list-in-binary-tree) Medium 
+5. Steps to Make Array Non-decreasing(https://leetcode.com/problems/steps-to-make-array-non-decreasing) Medium 
+
+Design and Applications 
+1. Design Linked List(https://leetcode.com/problems/design-linked-list) Medium 
+1. Design Skiplist(https://leetcode.com/problems/design-skiplist) Hard
+2. Design a Text Editor(https://leetcode.com/problems/design-a-text-editor) Hard
+3. Design HashSet(https://leetcode.com/problems/design-hashset) Easy 
+4. Design HashMap(https://leetcode.com/problems/design-hashmap) Easy 
+5. LRU Cache(https://leetcode.com/problems/lru-cache) Medium 
+6. Design Twitter(https://leetcode.com/problems/design-twitter) Medium 
+7. Plus One Linked List(https://leetcode.com/problems/plus-one-linked-list) Medium 
+8. Design Phone Directory(https://leetcode.com/problems/design-phone-directory) Medium 
+9. Design Circular Deque(https://leetcode.com/problems/design-circular-deque) Medium 
+10. Design Circular Queue(https://leetcode.com/problems/design-circular-queue) Medium 
+11. Design Browser History(https://leetcode.com/problems/design-browser-history) Medium 
+12. Design Front Middle Back Queue(https://leetcode.com/problems/design-front-middle-back-queue) Medium 
+13. Spiral Matrix IV(https://leetcode.com/problems/spiral-matrix-iv) Medium 
+14. All O`one Data Structure(https://leetcode.com/problems/all-oone-data-structure) Hard
+15. LFU Cache(https://leetcode.com/problems/lfu-cache) Hard
+16. Max Stack(https://leetcode.com/problems/max-stack) Hard
+
+Maths
+1. Convert Binary Number in a Linked List to Integer(https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer) Easy
+2. Add Two Numbers (https://leetcode.com/problems/add-two-numbers) Medium 
+3. Odd Even Linked List(https://leetcode.com/problems/odd-even-linked-list) Medium
+4. Add Two Numbers II(https://leetcode.com/problems/add-two-numbers-ii) Medium
+5. Add Two Polynomials Represented as Linked Lists(https://leetcode.com/problems/add-two-polynomials-represented-as-linked-lists) Medium
+6. Double a Number Represented as a Linked List(https://leetcode.com/problems/double-a-number-represented-as-a-linked-list) Medium
+7. Insert Greatest Common Divisors in Linked List(https://leetcode.com/problems/insert-greatest-common-divisors-in-linked-list) Medium

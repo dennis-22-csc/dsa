@@ -1,0 +1,34 @@
+LinkedLists
+If you are creating a music player app, what data structure should you use to store the music?
+The most recommended is a linkedlist.
+How is it possible that you can navigate back and forth pages in a web browser?
+It is because navigation is implemented using linkedlists.
+In some applications that allows you to undo actions you've taken, what data structure makes this possible?
+Linkedlists.
+If you want to implement the stack and queue data structures, how do you go about it?
+Linkedlists.
+What is a linkedlist and why is it suitable for these scenarios?
+A linkedlist is a data structrure existing as nodes.
+So when a linkedlist is talked about, imagine nodes.
+What is a node?
+A node is a point in a diagram at which lines intersect or branch.
+Nodes are best visualized by a diagram.
+When you're struggling to conceptualize a node, just draw a diagram.
+Now, if you're asked to implement a linkedlist, you can be simplify the task as being asked to implement nodes.
+But you should understand that this simplification is in conflict with another data structure called a tree data structure.
+A tree also exists as nodes. You can as well conceptualize nodes when conceptualizing a tree data structure.
+How can you differentiate a tree from a linkedlist?
+Both consists of nodes, in both, nodes are connected to each other. But in a tree, some nodes branch of to give birth to standalone nodesthat will be connected to eachother but not to the siblings of their parent node.
+All these are best captured using a diagram.
+Now that we know what a linkedlist is, do linkedlists exists in different categories of there is only one type of linkedlist?
+Well, linkedlists exists in various categories. But there are three common among us. 
+The first is a singly linkedlist.
+A singly linkedlist is a linkedlist implemented such that the nodes only connects in one direction (forward or backward). This is also best visualize using a diagram.
+The second is a doubly linkedlist.
+A doubly linkedlist is a linkedlist implemented such that the nodes connects  in two directions (forward and backward). This is best visualized using a diagram.
+The third is a circular linkedlist.
+A circular linkedlist is a linkedlist such that the last node in the list connects back to the first node in the list. This is best visualized using a diagram.
+While you can easily google for codes implementing a linkedlist, it's still good to understand how to implement one. You would learn one or two new things about the computer in the process.
+So next, we will look at how to implement a singly linkedlist in python.
+
+
