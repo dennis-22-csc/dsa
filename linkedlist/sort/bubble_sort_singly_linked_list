@@ -1,0 +1,699 @@
+While I've implemented a singly, double and circular linked list, implementing a linked list is not what I'll be tested on. Instead, I'll be tested on several problems that involves a Linked list.
+I have been able to group these problems in categories and I'll be covering the problems category by category.
+But before then, let me learn some sorting algorithms. This will aid me in tackling some of the sorting challenges.
+I think what I should do is apply each sorting algorithm on a singly linked list.
+Starting with the bubble sort, it seems the implementation requires running a loop through the list based on the n number of elements. Each time the loop traverses the list, it's objective is to move a larger character to the right but before the character larger than it. The largest character will appear at the end, with the second largest character before it and on and on.
+Let's take the below data set: 20, 90, 40, 10.
+In the first iteration of the loop, the value 20 will be compared to the value 90, whichever is greater will be compared with the next element 40, whichever is greater will be compared with the next element 10, whichever is greater will be stored in position 10.
+Let's assume 90 has been stored in index 3, the elements will now be 20, 40, 10, 90.
+In the second iteration of the loop, 20 will be compared to 40 on and on.
+While the solution is looking like something that can be easily implemented, how exactly do we do the insertion? Will we be using an already implemented add_at_index method? Wo'nt running such a method increase the complexity?
+I'll try not to use such a method. I'm thinking I can just play with the pointers.
+Let's see how it goes.
+I couldn't implement it. I was able to do a comparison and move the highest data to the last position. But I was unable to configure the loop to perform another iteration starting from the second node. I had to consult ChatGPT and the model did excellently.
+The first implementation swapped the data while retaining the nodes. I asked it to swap the nodes. It was also able to accomplish that.
+Now, for the swapping of data, it's implementation didn't followe my line of thought. My line of thought was that I will compare the first two nodes. I will take the highest node and make it the current iterated node, then skip the current iteration so the highest node can be compared to the next node. The idea is that I'm comparing the highest node with every other nodes in the list and swapping if neccessary.
+I needn't do that.
+All I needed to do was swap the data of the node. 
+Let's assume I have two nodes 90 and 20, the highest data is 90. The currently iterated node is 90, the next node is 20. All we need to do is change the data of the currently iterated node to 20 and the data of the next node to 90. This means that when the next node is iterated, the data 90 will be compared with the data of the next node and a swap will be made if neccessary.
+
+I think I was fooled by the explanation I got on the Geek4Geek weebsite.
+Well, it seems I'm the one that doesn't understand things yet. Because when I wrote the below, only the highest data got moved.
+
+def sort_data(self):
+        temp_node = self.head_node
+        while temp_node.next_node:
+            next_node = temp_node.next_node
+            next_node_data = next_node.node_data
+            temp_node_data = temp_node.node_data
+            if temp_node_data > next_node_data:
+                temp_node.node_data = next_node_data
+                next_node.node_data = temp_node_data
+            temp_node = temp_node.next_node
+  
+This means that I'll need to go on another iteration after all.
+I thought of using recursion but the ChatGpt solution shows there is no need for a recursion. But let me see if recursion will work.
+If you go the recursive route, how do you break out of the recursion?
+To implement going on another iteration without using recursion, we will need to make the current while loop an inner loop of another while loop.
+The idea is to define an outer while loop that will execute the inner while loop as long as a condition is true. When the condition becomes false, it means we are done swapping all the data.
+Ironically, the condition will be made to become false as soon as the outer loop starts executing, then the condition will only be changed to true if and only if the list is not already sorted. That is, if the data already appears from lowest to highest, then the condition will remain false which means there is no need to go through the list again. But if one of the data is higher than its next which led to a swap being made, then there is a need to go through the list again to see if the list is now ordered. If it is not yet ordered, the condition will be made to become true again. But each time the outer while loop executes, the condition will be made to become false.
+
+def sort_data(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            temp_node = self.head_node
+            while temp_node.next_node:
+                next_node = temp_node.next_node
+                next_node_data = next_node.node_data
+                temp_node_data = temp_node.node_data
+                if temp_node_data > next_node_data:
+                    temp_node.node_data = next_node_data
+                    next_node.node_data = temp_node_data
+                    swapped = True
+                temp_node = temp_node.next_node
+  
+ What you should know about this implementation is that only the data are swapped. The data don't carry their nodes with them.
+ But what you should also know is that we can implement for the data carrying their nodes with them.
+ How will it be done?The idea is that if the current node data is higher than the next node data, swap the two nodes. But even if we swap the two nodes, the current node points to the next node. How do we get the current node to point to the next node of the current next node?
+ It's very easy. Store a refrence to that node and assign things.
+ Came up with the below, led to an infinite loop:
+ 
+ def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            temp_node = self.head_node
+            previous_node = None
+            while temp_node.next_node:
+                next_node = temp_node.next_node
+                old_temp_node = temp_node
+                temp_node_data = temp_node.node_data
+                next_node_data = next_node.node_data
+                if temp_node_data > next_node_data:
+                    temp_node = next_node
+                    temp_node.next_node = old_temp_node
+                    temp_node.next_node.next_node = next_node.next_node
+                    swapped = True
+                temp_node = temp_node.next_node
+                print(temp_node.node_data)
+ And the loop is printing only the data of the highest node.
+A challenge I didn't even thinkm of is how we are going to change the head node.
+The head node should change in each iteration of the inner while loop. How did ChatGPT implemented this so clean?
+
+Well, ChatGPT's solution was clean but required lot of efforts for me to comprehend it.
+In fact, I had to do a trace of specific outputs in each iteration of the loop.
+I modified ChatGPT's solution to the below:
+
+def bubble_sort_node(self):
+        swapped = True
+        outer_count = 0
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+
+            inner_count = 0
+            outer_count += 1
+            c_print(f"Outer iteration: {outer_count}")
+            while current_node and current_node.next_node:
+                next_node = current_node.next_node
+
+                if current_node.node_data > next_node.node_data:
+                    if previous_node:
+                        previous_node.next_node = next_node
+                    else:
+                        self.head_node = next_node
+
+                    current_node.next_node = next_node.next_node
+                    next_node.next_node = current_node
+                    swapped = True
+                inner_count += 1
+                if previous_node:
+                    c_print(f"old_previous_node: {previous_node.node_data}")
+                    if previous_node.next_node:
+                        c_print(f"old_previous_node_next_node: {previous_node.next_node.node_data}")
+                    else:
+                        c_print(f"old_previous_node_next_node: {previous_node.next_node}")
+                else:
+                    c_print(f"old_previous_node: {previous_node}")
+
+                c_print(f"Inner iteration: {inner_count}")
+                c_print(f"Swapped: {swapped}")
+                c_print(f"head_node: {self.head_node.node_data}")
+                c_print(f"old_current_node: {current_node.node_data}")
+                if current_node.next_node:
+                    c_print(f"current_node.next_node: {current_node.next_node.node_data}")
+                else:
+                    c_print(f"current_node.next_node: {current_node.next_node}")
+                if next_node.next_node:
+                    c_print(f"next_node.next_node: {next_node.next_node.node_data}")
+                else:
+                    c_print(f"next_node.next_node: {next_node.next_node}")
+
+                previous_node = current_node
+                current_node = current_node.next_node
+
+                c_print(f"new_previous_node: {previous_node.node_data}")
+                if current_node:
+                    c_print(f"new_current_node: {current_node.node_data}")
+                else:
+                    c_print(f"new_current_node: {current_node}")
+            
+You can see how messy understanding codes can be.
+
+
+Now, how do we now implement the node swapping?
+While we know we will be defining an outer while loop that will execute an inner while loop, certain things needs to take place in the inner while loop for us to arrive at the outcome we want.
+But let's try and understand things with a sample data.
+Assume the data 90, 40, 20, 10. This data is to be sorted into 10, 20, 40, 90 while sorting the nodes themselves rather than just the data.
+For us to sort the nodes, we will compare the current node and its next node. If the next node is higher than the current node, we will swap the two nodes. 
+How do we implement this swap?
+Well, we will make 40 to point to 90 and 90 to point to 20. 20 already points to 10 so there is no need to manipulate 20.
+When we do that, all we've done is swap the first two nodes in the current iteration of the inner loop.
+Next, we will make the current node to be 20. How do we accomplish that?
+After making the current node to be 20, we need to check if 20 is higher than 10 or lower. Since 20 is higher than 10, we will switch both nodes. 10 will be made to point to 20 and 20 will be made to point to none. Then 40 also needs to be made to point to 10 since it currently points to 20.-
+You can see how complicated things are.
+Let's write some codes.
+I've gotten the below down:
+
+def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            while current_node.next_node:
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+                if current_node_data > next_node_data:
+                    next_node.next_node = current_node
+                    current_node.next_node = current_node.next_node.next_node
+    
+But this brought back the problem, how do I change the head node in the second iteration of the loop?
+Because if we don't change the head node, 90 will still be the head node and it currently points to 20. 20 points to 10. 40 is therefore lost.
+Run the below to see for yourself.
+
+def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            while current_node.next_node:
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+                if current_node_data > next_node_data:
+                    #next_node.next_node = current_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                current_node = current_node.next_node
+                return
+  
+ First of all, you need to understand that you won't be changing the head node in the second iteration of the inner loop, instead, it will be in the second iteration of the outer loop. The statement current_node = self.head_node doesnt get to be executed again until the second iteration of the outer loop. For the inner loop, what will be executed is the code while current_node.next_node.
+ But we still need a way to change the head node if the first two nodes are swapped.Because if the node in position two is moved to position 1 and the node in position 1 is moved to position 2, it means the head node will need to be made to be the node initially in position 2.
+We can't write the line self.head_node = current node to achieve this. This is because current_node will change in each iteration of the inner loop.
+How then do we change the head node?
+While we will be changing the head node only when there was a swap at the beginning, a second condition can be that the head node should only be changed if there is no previous node. If the swap is made in the first iteration of the outer loop and the first iteration of the inner loop, there won't be a previous node. For other iterations, we will make sure previous node is given a value and that value will be the current node.
+Running the below should print all the nodes:
+
+def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            while current_node.next_node:
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                current_node = current_node.next_node
+                return
+  
+  When I changed the code to the below, I got a None type error:
+  
+  def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            while current_node.next_node:
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                previous_node = current_node
+                current_node = current_node.next_node
+
+I understand why. At some point in the execution of the inner loop, current node will be assigned the value None. This is because at some point current_node.next_node will be None and that will be assigned to current node. 
+To solve this problem, the first conditionn in the inner loop is that current node should contain a value.
+
+I no longer get the none type error 
+
+def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            while current_node and current_node.next_node:
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                previous_node = current_node
+                current_node = current_node.next_node
+
+But now, the value 10 is not being printed. That is, the last data is not beeing printed anymore.
+When I added a return, the value 10 was included:
+
+def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            while current_node and current_node.next_node:
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                previous_node = current_node
+                current_node = current_node.next_node
+                return 
+
+This means that  the inner loop still have some lapses.
+But without understanding the problem, we won't know how to solve it.
+So let's try and undesratnd the problem.
+We will need to inject print statements to see what is returned in each iteration of the while loop.
+
+def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            inner_count = 0
+            while current_node and current_node.next_node:
+                inner_count += 1
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+                print(f"Inner iteration: {inner_count}")
+                print(f"head_node: {self.head_node.node_data}")
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                if previous_node:
+                    print(f"old_previous_node: {previous_node.node_data}")
+                    if previous_node.next_node:
+                        print(f"old_previous_node_next_node: {previous_node.next_node.node_data}")
+                    else:
+                        print(f"old_previous_node_next_node: {previous_node.next_node}")
+                else:
+                    print(f"old_previous_node: {previous_node}")
+                print(f"old_current_node: {current_node.node_data}")
+                if current_node.next_node:
+                    print(f"current_node.next_node: {current_node.next_node.node_data}")
+                else:
+                    print(f"current_node.next_node: {current_node.next_node}")
+                if next_node.next_node:
+                    print(f"next_node.next_node: {next_node.next_node.node_data}")
+                else:
+                    print(f"next_node.next_node: {next_node.next_node}")
+
+                previous_node = current_node
+                current_node = current_node.next_node
+                print(f"new_previous_node: {previous_node.node_data}")
+                if current_node:
+                    print(f"new_current_node: {current_node.node_data}")
+                else:
+                    print(f"new_current_node: {current_node}")
+
+
+When I ran the above, the below was outputted:
+
+Inner iteration: 1
+head_node: 90
+old_previous_node: None
+old_current_node: 90
+current_node.next_node: 20
+next_node.next_node: 90
+new_previous_node: 90
+new_current_node: 20
+
+Inner iteration: 2
+head_node: 40
+old_previous_node: 90
+old_previous_node_next_node: 20
+old_current_node: 20
+current_node.next_node: None
+next_node.next_node: 20
+new_previous_node: 20
+new_current_node: None
+
+When i hand trace the codes, it turns out in the second iteration, the current node which is 20 is being made to point to None which is correct. The value 10 is also being made to point to 20 which is correct. But what has not being implemented is the changing of 90 to point to 10. Because at that point, 90 points to 20 and 20 has now been made to point to None. If we don't make 90 points to 10, 10 becomes lost.
+How do we make 90 to point to 10?
+Well, because we've already implemented storing the previous node and 90 is a previous node in the second iteration of the inner loop, we can easily assign the value 10 to be the next_node of that previous node, but what is 10? Well, 10 is currently the next node of the current node 20.
+Modifying the code to the below will therefore solve the problem.
+
+def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+
+            while current_node and current_node.next_node:
+
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    else:
+                        previous_node.next_node = current_node.next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+
+                previous_node = current_node
+                current_node = current_node.next_node
+
+
+You can see how we pointed the previous node to the next node of the current node?
+Now, the current implementation will only make one outer iteration. this becase as soon as the outer while loop executes, the swapped variable is assigned the value False. This means if we want the loop to make many more passes, we will need to change the value to true in the inner while loop.
+Now, in which part of the inner loop should the variable be reassigned?
+The variable should only be reassigned if there was at least one instance of nodes being swapped. 
+In any iteration of the inner loop, all the nodes will be iterated on. If there is no instance of a swap, that is, there was no instance of the current node being greater than the next node, then there is no need for the outer loop to make another pass. The list is already sorted. But if there is at least one instance, the outer loop should go again. The outer loop should only stop to go when there is no instance of there being a swap.
+
+def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+
+            while current_node and current_node.next_node:
+
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    else:
+                        previous_node.next_node = current_node.next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                    swapped = True
+
+                previous_node = current_node
+                current_node = current_node.next_node
+
+Now, try to understand how the swap is carried out. Given the data 90, 40, 20, 10
+In the first iteration of the outer loop, the first iteration of the inner loop will change the list to:  40, 90, 20, 10
+Run the below to see for yourself:
+
+def sort_node(self):
+        swapped = True
+        outer_count = 0
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            inner_count = 0
+
+            while current_node and current_node.next_node:
+
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    else:
+                        previous_node.next_node = current_node.next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                    swapped = True
+
+                previous_node = current_node
+                current_node = current_node.next_node
+                inner_count += 1
+                if inner_count == 1:
+                    return
+            outer_count += 1
+
+
+What happened here? 40 and 90 were swithced, but 20 and 10 were not swiched.
+Why are the other two not switched?
+It's because only the first two node are operated on in the first iteration of the inner loop.
+
+In the second iteration of the inner loop, the list will be: 40, 90, 10, 20.
+Run the below to see for yourself:
+def sort_node(self):
+        swapped = True
+        outer_count = 0
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            inner_count = 0
+
+            while current_node and current_node.next_node:
+
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    else:
+                        previous_node.next_node = current_node.next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                    swapped = True
+
+                previous_node = current_node
+                current_node = current_node.next_node
+                inner_count += 1
+                if inner_count == 2:
+                    return
+            outer_count += 1
+
+The node 20 and 10 were operated on in this iteration  and they were effectively swithced.
+In the second iteration of the outer loop, the list will remain 40, 90, 10, 20.
+Run the below to see for yourself:
+def sort_node(self):
+        swapped = True
+        outer_count = 0
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            inner_count = 0
+
+            while current_node and current_node.next_node:
+
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    else:
+                        previous_node.next_node = current_node.next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                    swapped = True
+
+                previous_node = current_node
+                current_node = current_node.next_node
+                inner_count += 1
+                if inner_count == 1 and outer_count == 1:
+                    print("second pass, first iteration")
+                    return
+            outer_count += 1
+            
+This is because in the first iteration of the second pass, there will be no swithc of 40 and 90. This is because 40 is not greater than 90.
+Now, in the second iteration, the list will be 40, 10, 90, 20.
+This is because in the first iteration since there was no swap, current node will be 90 and 90 appears in position two in the second iteration. So, 90 and 10 will be operated on in the second iteration. Since 90 is graeter than 10, there will be a switch.
+Run the below to see for yourself:
+
+def sort_node(self):
+        swapped = True
+        outer_count = 0
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            inner_count = 0
+
+            while current_node and current_node.next_node:
+
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    else:
+                        previous_node.next_node = current_node.next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                    swapped = True
+
+                previous_node = current_node
+                current_node = current_node.next_node
+                inner_count += 1
+                if inner_count == 2 and outer_count == 1:
+                    print("second pass, second iteration")
+                    return
+            outer_count += 1
+
+This should get you started on seeing the state of the list in each iteration of the outer and inner loop.
+
+The below is the complete codes:
+
+class Node:
+    def __init__(self, node_data, next_node=None):
+        self.node_data = node_data
+        self.next_node = next_node
+
+class SinglyLinkedList:
+    def __init__(self):
+        self.head_node = None
+        self.current_node = None
+        self.count = 0
+
+    def add(self, data):
+        if not self.head_node:
+            new_node = Node(data)
+            self.head_node = new_node
+            self.count += 1
+            return
+        self.add_last(data)
+        self.count += 1
+
+    def add_first(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        new_node = Node(data, self.head_node)
+        self.head_node = new_node
+        self.count += 1
+
+    def add_last(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        temp_node = self.head_node
+        while temp_node.next_node:
+            temp_node = temp_node.next_node
+        new_node = Node(data)
+        temp_node.next_node = new_node
+        self.count += 1
+
+    def __iter__(self):
+        self.current_node = self.head_node
+        return self
+
+    def __next__(self):
+        if not self.current_node:
+            raise StopIteration
+        data = self.current_node.node_data
+        self.current_node = self.current_node.next_node
+        return data
+
+    def add_at_index(self, data, index):
+        count = 1
+        temp_node = self.head_node
+        if index > self.count:
+            raise IndexError("Index out of range")
+        if index == 0:
+            new_node = Node(data, temp_node)
+            self.head_node = new_node
+            self.count += 1
+            return
+        while temp_node.next_node:
+            if count == index:
+                new_node = Node(data, temp_node.next_node)
+                temp_node.next_node = new_node
+                self.count += 1
+                return
+            temp_node = temp_node.next_node
+            count += 1
+        new_node = Node(data, temp_node.next_node)
+        temp_node.next_node = new_node
+        self.count += 1
+
+    def delete_at_index(self, index):
+        count = 1
+        temp_node = self.head_node
+        if index >= self.count:
+            raise IndexError("Index out of range")
+        if index == 0:
+            self.head_node = temp_node.next_node
+            return
+        while temp_node.next_node:
+            if count == index:
+                temp_node.next_node = temp_node.next_node.next_node
+                return
+            temp_node = temp_node.next_node
+            count += 1
+
+    def sort_data(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            temp_node = self.head_node
+            while temp_node.next_node:
+                next_node = temp_node.next_node
+                next_node_data = next_node.node_data
+                temp_node_data = temp_node.node_data
+                if temp_node_data > next_node_data:
+                    temp_node.node_data = next_node_data
+                    next_node.node_data = temp_node_data
+                    swapped = True
+                temp_node = temp_node.next_node
+
+    def sort_node(self):
+        swapped = True
+        while swapped:
+            swapped = False
+            current_node = self.head_node
+            previous_node = None
+            while current_node and current_node.next_node:
+                next_node = current_node.next_node
+                current_node_data = current_node.node_data
+                next_node_data = next_node.node_data
+                if current_node_data > next_node_data:
+                    if not previous_node:
+                        self.head_node = next_node
+                    else:
+                        previous_node.next_node = current_node.next_node
+                    current_node.next_node = current_node.next_node.next_node
+                    next_node.next_node = current_node
+                    swapped = True
+                previous_node = current_node
+                current_node = current_node.next_node
+
+mylist = SinglyLinkedList()
+mylist.add_first(90)
+mylist.add_last(40)
+mylist.add_last(20)
+mylist.add(10)
+#print(mylist.head_node)
+#print(mylist.head_node.node_data)
+mylist.sort_node()
+#print(mylist.head_node)
+#print(mylist.head_node.node_data)
+for i in mylist:
+    print(i)
