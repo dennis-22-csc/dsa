@@ -1,0 +1,78 @@
+Next, we look at the selection sort.
+The algorithm is very straightforward to implement. At least, based on ChatGPT's implementation.
+Given the data 10, 90, 20, 40
+We can sort the data by swapping a node with another node whose value is lesser than that node.
+We are not really swapping the node. We are instead swapping the data.
+Let's assume the current node is 10, we will iterate through the other nodes and check is there is any node less than 10. If there is, store the value in a min node variable.
+When the loop is exited, swap the data of the nodes.
+Move to the next node.
+What makes this approach different from the bubble sort approach? Food for thought.
+
+I implemented the below, it didn't produce the correct output. It duplicated 20 and omitted 90
+
+def sort_list(head_node):
+    current_node = head_node
+    while current_node:
+        min_node = current_node
+        next_node = current_node.next_node
+        while next_node:
+            if next_node.node_data < min_node.node_data:
+                min_node = next_node
+            next_node = next_node.next_node
+        current_node.node_data = min_node.node_data
+        min_node.node_data = current_node.node_data
+        current_node = current_node.next_node
+90 is the second data in the original list and should be the last data in the modified list. Instead, 20 was duplicated. What is the reason for this?
+Oh. I now know why. I need to store the current node data before hand so i can assign it to min node.
+
+Below is the full code:
+
+from singly_linked_list import SinglyLinkedList
+
+def sort_list(head_node):
+    current_node = head_node
+    while current_node:
+        min_node = current_node
+        next_node = current_node.next_node
+        current_node_data = current_node.node_data
+        while next_node:
+            if next_node.node_data < min_node.node_data:
+                min_node = next_node
+            next_node = next_node.next_node
+        current_node.node_data = min_node.node_data
+        min_node.node_data = current_node_data
+        current_node = current_node.next_node
+
+def selection_sort(head_node):
+    current_node = head_node
+
+    while current_node:
+        min_node = current_node
+        next_node = current_node.next_node
+        # Find the minimum node in the remaining unsorted portion
+        while next_node:
+            if next_node.node_data < min_node.node_data:
+                min_node = next_node
+            next_node = next_node.next_node
+
+        # Swap the data of the current node and the minimum node
+        current_node.node_data, min_node.node_data = min_node.node_data, current_node.node_data
+
+
+        current_node = current_node.next_node
+
+mylist = SinglyLinkedList()
+mylist.add_first(10)
+mylist.add_last(90)
+mylist.add_last(20)
+mylist.add(40)
+#print(mylist.head_node)
+#print(mylist.head_node.node_data)
+sort_list(mylist.head_node)
+#print(mylist.head_node)
+#print(mylist.head_node.node_data)
+
+for i in mylist:
+    print(i)
+    
+sort_list is the method I implemented while selection_sort is what ChatGPT implemented.
