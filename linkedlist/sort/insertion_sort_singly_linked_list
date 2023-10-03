@@ -1,0 +1,461 @@
+The next sorting algorithm to be learnt is the insertion sort. 
+From Geek4Geeks borad description of the algorithm, itlooks similar to bubble sort. But even at that, I don't understand what exactly they are saying.
+Let me use ChatGPT to get the implementation, then try to see what makes it different from Bubble sort.
+
+Below is ChatGPT's solution:
+
+
+    def insertion_sort(self):
+        if self.head_node is None or self.head_node.next_node is None:
+            return
+
+        # Initialize a new linked list to store the sorted nodes
+        sorted_list = SinglyLinkedList()
+
+        current_node = self.head_node
+
+        while current_node:
+            next_node = current_node.next_node  # Save the next node before removing
+
+            # Find the correct position to insert the current node in the sorted list
+            sorted_node = sorted_list.head_node
+            prev_node = None
+
+            while sorted_node and sorted_node.node_data < current_node.node_data:
+                prev_node = sorted_node
+                sorted_node = sorted_node.next_node
+
+            # Insert the current node into the sorted list
+            if prev_node is None:
+                current_node.next_node = sorted_list.head_node
+                sorted_list.head_node = current_node
+            else:
+                prev_node.next_node = current_node
+                current_node.next_node = sorted_node
+
+            # Move to the next node in the original list
+            current_node = next_node
+
+        # Replace the original list with the sorted list
+        self.head_node = sorted_list.head_node
+
+As typical, I've had to inject print statements in order to understand the solution:
+
+def insertion_sort(self):
+        if self.head_node is None or self.head_node.next_node is None:
+            return
+
+        # Initialize a new linked list to store the sorted nodes
+        sorted_list = SinglyLinkedList()
+
+        current_node = self.head_node
+        count = 0
+        while current_node:
+            count += 1
+            next_node = current_node.next_node  # Save the next node before removing
+
+            # Find the correct position to insert the current node in the sorted list
+            sorted_node = sorted_list.head_node
+            prev_node = None
+
+            c_print(f"Iteration: {count}")
+
+            c_print(f"current node: {current_node.node_data}")
+
+            if next_node:
+                c_print(f"next_node: {next_node.node_data}")
+            else:
+                c_print(f"next_node: {next_node}")
+
+            if sorted_node:
+                c_print(f"sorted_node: {sorted_node.node_data}")
+            else:
+                c_print(f"sorted_node: {sorted_node}")
+
+            while sorted_node and sorted_node.node_data < current_node.node_data:
+                prev_node = sorted_node
+                sorted_node = sorted_node.next_node
+                if count == 4:
+                    c_print(f"inner_prev_node: {prev_node.node_data}")
+                    c_print(f"inner_sorted_node: {sorted_node.node_data}")
+            if prev_node:
+                c_print(f"new_prev_node: {prev_node.node_data}")
+            else:
+                c_print(f"new_prev_node: {prev_node}")
+            if sorted_node:
+                c_print(f"new_sorted_node: {sorted_node.node_data}")
+            else:
+                c_print(f"new_sorted_node: {sorted_node}")
+            if count == 4:
+                return
+            # Insert the current node into the sorted list
+            if prev_node is None:
+                current_node.next_node = sorted_list.head_node
+                sorted_list.head_node = current_node
+            else:
+                prev_node.next_node = current_node
+                current_node.next_node = sorted_node
+
+            if prev_node:
+                if prev_node.next_node:
+                    c_print(f"prev_node.next_node: {prev_node.next_node.node_data}")
+                else:
+                    c_print(f"prev_node.next_node: {prev_node.next_node}")
+            if current_node.next_node:
+                c_print(f"current_node.next_node: {current_node.next_node.node_data}")
+            else:
+                c_print(f"current_node.next_node: {current_node.next_node}")
+            if sorted_list.head_node:
+                c_print(f"sorted_list.head_node: {sorted_list.head_node.node_data}")
+            else:
+                c_print(f"sorted_list.head_node: {sorted_list.head_node}")
+
+
+            # Move to the next node in the original list
+            current_node = next_node
+
+        # Replace the original list with the sorted list
+        self.head_node = sorted_list.head_node
+
+Based on what you've learnt, what can you say is the core of the insertion sort?
+The core of the insertion sort method is to build a sorted list by inserting the nodes in the original list into a list in ordered positions.
+Remember that a singly linked list is created by making a node a next node of another node?
+if I have three nodes, I can insert the new node to appear in between the first and second node, I can insert the new node in between the  second and third node, I can insert the new node before the first node, I can insert the new node after the last node.
+We can use this insight to build a sorted list which can now be assigned to the variable storing the original list.
+How do we build this sorted list?
+We will create an empty list which will be the sorted list.
+We will then define a while loop that will run through the nodes in the original list.
+In the first iteration of the while loop, the first node in the original list will be made the head node of the sorted list. That node may or may not be the lowest node in the original list. But in the sorted list, it is the first and head node. 
+In the second iteration of the while loop, the second node in the original list will be added to the sorted list, but in what position? Is it before the current head node or its after the current head node? Since we are creating a sorted list, its position will be determined by whether or not it is higher or lower than the current head node. If it is lower than the current head node, it should be added to before the current head node. If it is higher than the current head node, it should be added to after the current head node.
+In the third iteration of the loop, the third node in the original list will be added to the sorted list but in what position?
+It's position will be determined by comparing it with each of the nodes in the sorted list to see which it is lower than but not higher than and if it is higher than all the nodes in the sorted list, it should be made the last node.
+How do we bring all of these to life?
+Let's proceed iteratively.
+def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node = self.head_node
+        while current_node:
+
+Now, we need to make the first node(current current node) the head node of the sorted list. How do we do this?
+We can introduce a previous_node variable. The first node won't have a previous node, so when there is no previous node, we can make that node the head node.
+
+def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node = self.head_node
+        while current_node:
+            previous_node = None
+            if not previous_node:
+                sorted_list.head_node = current_node
+            previous_node = current_node
+            current_node = current_node.next_node
+    
+To implement for the second node and other nodes, we will define an inner while loop that will traverse the sorted list while comparing the current node with each node in the list. If the current node in the original list is lower than the current node in the sorted list, it should be added to before the node . If the current node in the original list is higher than the current node in the sorted list, it should be added to after the node.
+Let's acquire access to the current node in the ordered list.
+def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node_main = self.head_node
+        while current_node_main:
+            previous_node = None
+            current_node_sorted = sorted_list.head_node
+            while current_node_sorted:
+                pass
+            if not previous_node:
+                sorted_list.head_node = current_node_main
+            previous_node = current_node_main
+            current_node_main = current_node_main.next_node
+    
+For the if part, what we need here is to see if the current node in the original list is the lowest or highest node in the sorted list or somewhere in between. If it is the highest, it will be made to be the last node. If it is the lowest, it will be made to be the head node and if it is somewhere in between, it will be made to be the next node of the node it is higher than.
+How do we implement this in the while loop?  
+How do we know if the current node in the original list is the highest or lowest in the sorted list?
+We will traverse all the nodes in the sorted list and check if the current node is higher than the traversed node. If it is higher, we should know that we will be pointing the traversed node to the current node. But we won't be doing the pointing in the while loop since the goal is to compare against all the nodes. All we will do is replacing the variable that will give us access to the node will be pointing. If the current node is higher than any of the nodes, that variable should be assigned the currently iterated node. The current node will then be made the next node of that node outside the loop.
+Now, can the previous_node variable play the role of that variable?
+Yes.
+Why?
+Because if the current node is higher than any node in the sorted list, the node in the sorted list effectively becomes the previous node of the current node.  
+I came up with the below, not yet tested though:
+
+def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node_main = self.head_node
+        while current_node_main:
+            previous_node = None
+            current_node_sorted = sorted_list.head_node
+            while current_node_sorted and current_node_main.node_data > current_node_sorted.node_data:
+                previous_node = current_node_sorted
+                current_node_sorted = current_node_sorted.next_node
+            if not previous_node:
+                sorted_list.head_node = current_node_main
+            else:
+                previous_node.next_node = current_node_main
+            current_node_main = current_node_main.next_node
+
+Now, there is something you need to consider: What the current node main will point to.
+Except it is appearing as the last node, it needs to point to the node it is less than in the sorted list.
+A value will be assigned to the previous_node variable as soon as a node lesser than the current node main is encountered. But at some other junction, a node hihger than the current node main will be encountered. 
+Does the below solves that problem?
+
+def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node_main = self.head_node
+        while current_node_main:
+            previous_node = None
+            current_node_sorted = sorted_list.head_node
+            next_node_sorted = None
+            while current_node_sorted and current_node_main.node_data > current_node_sorted.node_data:
+                previous_node = current_node_sorted
+                next_node_sorted = current_node_sorted.next_node
+                current_node_sorted = current_node_sorted.next_node
+            if not previous_node:
+                sorted_list.head_node = current_node_main
+            else:
+                previous_node.next_node = current_node_main
+                current_node_main = next_node_sorted
+            current_node_main = current_node_main.next_node
+ 
+ Can we test the function at this point?
+ Okay. 
+ It printed 10, 20, 40. It excluded 90. 90 is the head node. At some point, 90 was replaced with 10 and not pointed to. Hence why it disappeared from the chain.This means after changing the head node, we should point the new head node to the previous node.  
+ Implementing the below ensured only the value 10 is in the list:
+ 
+ def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node_main = self.head_node
+        while current_node_main:
+            previous_node = None
+            current_node_sorted = sorted_list.head_node
+            next_node_sorted = None
+            while current_node_sorted and current_node_main.node_data > current_node_sorted.node_data:
+                previous_node = current_node_sorted
+                next_node_sorted = current_node_sorted.next_node
+                current_node_sorted = current_node_sorted.next_node
+            if not previous_node:
+                sorted_list.head_node = current_node_main
+                sorted_list.head_node.next_node = current_node_sorted
+            else:
+                previous_node.next_node = current_node_main
+                current_node_main = next_node_sorted
+            current_node_main = current_node_main.next_node
+    
+The only way to get this right without looking up the solution is to hand trace the current solution.
+Looking up solutions won't help me in solving my own problems.
+While I observed an infinite loop, injecting print statements revealled the details of the infinite loop
+
+def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node_main = self.head_node
+        count = 0
+        while current_node_main:
+            previous_node = None
+            current_node_sorted = sorted_list.head_node
+            next_node_sorted = None
+            count += 1
+            c_print(f"Iteration: {count}")
+
+            c_print(f"current_node_main: {current_node_main.node_data}")
+
+            while current_node_sorted and current_node_main.node_data > current_node_sorted.node_data:
+                previous_node = current_node_sorted
+                next_node_sorted = current_node_sorted.next_node
+                current_node_sorted = current_node_sorted.next_node
+            if not previous_node:
+                sorted_list.head_node = current_node_main
+                #sorted_list.head_node.next_node = current_node_sorted
+            else:
+                previous_node.next_node = current_node_main
+                current_node_main.next_node = next_node_sorted
+            if next_node_sorted:
+                c_print(f"next_node_sorted: {next_node_sorted.node_data}")
+            else:
+                c_print(f"next_node_sorted: {next_node_sorted}")
+  
+            if current_node_sorted:
+                c_print(f"current_node_sorted: {current_node_sorted.node_data}")
+            else:
+                c_print(f"current_node_sorted: {current_node_sorted}")
+            current_node_main = current_node_main.next_node
+        self.head_node = sorted_list.head_node
+
+
+In iteration 2, next_node_sorted should be None. Instead, I'm seeing 90. Current_node_sorted should as well be None. Instead, I'm seeing 90. While the inner loop will be broken out of since it depends on the extra condition that current_node_main should be greater than the current_node_sorted, why is this circular assignment happening?
+I suspect the block containing the below two codes:
+previous_node.next_node = current_node_main
+current_node_main.next_node = next_node_sorted
+ 
+In fact, if I comment out the  current_node_main.next_node = next_node_sorted line, i wont experience the infinite looop. 
+ Alright, let me look at the ChatGPT solution and compare it with what I wrote.        
+The below line is not in ChatGPT's implementation:
+
+next_node_sorted = current_node_sorted.next_node
+
+This line  current_node_main.next_node = next_node_sorted in my implementation should instead be  current_node_main.next_node = current_node_sorted. 
+This line current_node_main.next_node = sorted_list.head_node  which should be in the block when previous_node is none is missing in my implementation. 
+
+def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node_main = self.head_node
+
+        while current_node_main:
+            previous_node = None
+            current_node_sorted = sorted_list.head_node
+
+            next_node_main = current_node_main.next_node
+
+            while current_node_sorted and current_node_main.node_data > current_node_sorted.node_data:
+                previous_node = current_node_sorted
+                current_node_sorted = current_node_sorted.next_node
+            if not previous_node:
+                current_node_main.next_node = sorted_list.head_node
+                sorted_list.head_node = current_node_main
+            else:
+                previous_node.next_node = current_node_main
+                current_node_main.next_node = current_node_sorted
+
+            current_node_main = next_node_main
+        self.head_node = sorted_list.head_node
+  
+Why are we making the next node of the current_node_main to be current_node_sorted?
+It's because we need to make the current node main to point to the next node of current node sorted.
+Let's assume the below are the data in the sorted list 10, 90.
+Now, we want to add 40 to the list.
+The inner while will loop through the list and check if 40 is greater than 10. It is, so it will assign 10 as the previous node. It will assign 90 as the current_node sorted.
+In the next iteration of the inner loop, it will check if 40 is greater than 90. It isn't, the loop will stop execution.
+At this point, the value 90 currently in the current_node_sorted variable is very useful.
+This is because while we will be making 40 the next node of 10, we need to make 90 the next node of 40. The line current_node_main.next_node = current_node_sorted achieves that. 
+
+The below two codes should not be swapped.
+
+current_node_main.next_node = sorted_list.head_node
+sorted_list.head_node = current_node_main
+ 
+ If you do that, you create an infinite loop. We are trying to chanhe the head node here. It will be done by making the current node the head node and making the current node point to the previous head node. But since you didn't create a variable to store the previous head node, if you first of use the variable to store the new head node and then try to manipualte the next node, the next node you will be manipulating is that of the new head node not that of the previous head node.
+ 
+ In all, I can say the reason why I blew the implementation is because I didn't drill down how exactly I'll be changing the pointers.
+ Hopefully, when I give this a shot again, Ill get it right. 
+ The below is the full codes:
+ 
+   def c_print(text):
+    with open('stdout', 'a') as file:
+        file.write(f"{text}\n")
+
+class Node:
+    def __init__(self, node_data, next_node=None):
+        self.node_data = node_data
+        self.next_node = next_node
+
+class SinglyLinkedList:
+    def __init__(self):
+        self.head_node = None
+        self.current_node = None
+        self.count = 0
+
+    def add(self, data):
+        if not self.head_node:
+            new_node = Node(data)
+            self.head_node = new_node
+            self.count += 1
+            return
+        self.add_last(data)
+        self.count += 1
+
+    def add_first(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        new_node = Node(data, self.head_node)
+        self.head_node = new_node
+        self.count += 1
+
+    def add_last(self, data):
+        if not self.head_node:
+            self.add(data)
+            return
+        temp_node = self.head_node
+        while temp_node.next_node:
+            temp_node = temp_node.next_node
+        new_node = Node(data)
+        temp_node.next_node = new_node
+        self.count += 1
+
+    def __iter__(self):
+        self.current_node = self.head_node
+        return self
+
+    def __next__(self):
+        if not self.current_node:
+            raise StopIteration
+        data = self.current_node.node_data
+        self.current_node = self.current_node.next_node
+        return data
+
+    def add_at_index(self, data, index):
+        count = 1
+        temp_node = self.head_node
+        if index > self.count:
+            raise IndexError("Index out of range")
+        if index == 0:
+            new_node = Node(data, temp_node)
+            self.head_node = new_node
+            self.count += 1
+            return
+        while temp_node.next_node:
+            if count == index:
+                new_node = Node(data, temp_node.next_node)
+                temp_node.next_node = new_node
+                self.count += 1
+                return
+            temp_node = temp_node.next_node
+            count += 1
+        new_node = Node(data, temp_node.next_node)
+        temp_node.next_node = new_node
+        self.count += 1
+
+    def delete_at_index(self, index):
+        count = 1
+        temp_node = self.head_node
+        if index >= self.count:
+            raise IndexError("Index out of range")
+        if index == 0:
+            self.head_node = temp_node.next_node
+            return
+        while temp_node.next_node:
+            if count == index:
+                temp_node.next_node = temp_node.next_node.next_node
+                return
+            temp_node = temp_node.next_node
+            count += 1
+    def sort_list(self):
+        sorted_list = SinglyLinkedList()
+        current_node_main = self.head_node
+
+        while current_node_main:
+            previous_node = None
+            current_node_sorted = sorted_list.head_node
+
+            next_node_main = current_node_main.next_node
+
+            while current_node_sorted and current_node_main.node_data > current_node_sorted.node_data:
+                previous_node = current_node_sorted
+                current_node_sorted = current_node_sorted.next_node
+            if not previous_node:
+                current_node_main.next_node = sorted_list.head_node
+                sorted_list.head_node = current_node_main
+            else:
+                previous_node.next_node = current_node_main
+                current_node_main.next_node = current_node_sorted
+
+            current_node_main = next_node_main
+        self.head_node = sorted_list.head_node
+
+mylist = SinglyLinkedList()
+mylist.add_first(10)
+mylist.add_last(90)
+mylist.add_last(20)
+mylist.add(40)
+#print(mylist.head_node)
+#print(mylist.head_node.node_data)
+mylist.sort_list()
+#print(mylist.head_node)
+#print(mylist.head_node.node_data)
+
+for i in mylist:
+    print(i)              

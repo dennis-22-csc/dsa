@@ -1,0 +1,16 @@
+Iteration: 1
+current_node_main: 10
+previous_node: None
+current_node_sorted: None
+Iteration: 2
+current_node_main: 90
+previous_node: 10
+current_node_sorted: None
+Iteration: 3
+current_node_main: 20
+previous_node: 10
+current_node_sorted: 90
+Iteration: 4
+current_node_main: 40
+previous_node: 20
+current_node_sorted: 90
