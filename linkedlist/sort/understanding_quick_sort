@@ -1,0 +1,283 @@
+40, 90, 10, 20
+
+40 -> 20, 10, 40, 90
+
+20 -> 10, 20, 40, 90
+
+10 -> 10, 20, 40, 90
+
+Iterate through 90, 10, and 20. If any of the data is less than pivot, it needs to be moved to the left of pivot.
+When the cursor is at 90, 90 is not less than 40, there will be no movement, point the cursor to 10.
+When the cursor is at 10, 10 is less than 40, 10 needs to be moved to the left of 40. How will this movement be made? 
+We are going to assign node 90 to a variable left, we will then assign the data of node 10 to the variable left and vice versa.
+Node 10(right) will now hold 90 while node 90 (left) will now hold 10. The list will at this point be 40, 10, 90, 20.
+The cursor will next be pointed to node 20. 20 is less than 40. We will assign 90 to variable left (We are assigning node 10 but node 10 now holds 90). Next, we will assign 90 to node 20 and 20 to node 90. The list will at this point be 40, 10, 20, 90.
+Because there is no node after 20, the loop will be exited.
+Outside the loop, we will swap node 20 with node 40. Node 20 is the current left. After the swap, the list effectively becomes 20, 10, 40, 90.
+While the current left now begins the list, the value in the left variable is 40 and will be the end value in the next call to the partition method. While the start value will be 20. This means the second time the partition method is called, only 20 and 10 will be iterated on. The loop will break out when it gets to 40.
+
+Second call to partition
+Iterate through 10. If 10 is less than 20, do a swap. Assign 10 (next node of 20) to a variable left. Right is also 10 , so left will finish as 10.
+Outside the loop, swap 10 with 20 which effectively changes the list to 10, 20, 40, 90. Return 20 (new left) as pivot while 10 becomes the new head node.
+
+Original list 40, 10, 90, 20
+
+40 -> 20, 10, 40, 90
+
+
+20 -> 10, 20, 40, 90
+
+
+10 -> 10, 20, 40, 90
+
+
+
+Case List
+40, 90, 20, 10
+If at the end of the iteration, none of 90, 20 and 10 are less than 40, left will be 40 (starting node).
+
+Let's demonstrate that using the below list:
+
+40, 90, 50, 70
+
+In the above case, left will be 40.
+We will then swap 40 and 40. The list will remain 40, 90, 50, 70.
+40 will remain the head node while 40 is as well the left that would be returned.
+The next time the partition function is called, left (start node/head node) will be 40, end will be 40, right will be 90.
+While right != 40
+There will be an exception when right gets to None. 
+
+This is why the condition required for the quick_sort function to run recursively is it start is not equal to end. 
+But if that's the case, how do we sort that list? 
+
+The problem of something like this was solved by moving start to the next node in the third call to the quick sort function.
+There is a condition in the quick sort function that the partition function should only be called if start is not equal to end. 
+To now cover for the case where start is equal to end but there are still data to be sorted, the start will now move one pointer forward and the end will be changed to the original end which is None. 
+At some point, pivot.next_node (the technique used to move the pointer one step forward) will be None. After then, the recursive function will be exited. 
+
+Understanding why there is a need to swap data inside the while loop
+
+First of all, the swap will only become necessary if right (currently iterated data) is less than pivot.
+Using the list 40, 90, 10, 20 as a case study, at 90, a swap won't be necessary. But if a swap is not necessary at 90, it means 90 is bigger than pivot. While 90 is already appearing on the right of 40, the position 40 currently is won't be its final position if there are nodes lesser than it. If that won't be its final position, we will need to move 90 one step forward. But we will only move 90 one step forward if we encounter a node lesser than 40.
+When we encounter a node lesser than 40, we will assign a reference to 90 to the variable left, we will then swap the 90 with the current element that is lesser than 40 knowing that outside the loop, we will still swap 40 with the element lesser than 40 which effectively sorts the list.
+When we do this swap, the list will be 40, 10, 90, 20.
+At this point, left is 10 and points to 90. Because it points to 90, if we encounter an element less than 40 again, we know we will need to move 90 again one step forward.
+Because 20 is less than 90, we will assign 90 to left and swap 90 with 20.
+The list will now be 40, 10, 20, 90.
+When we now swap 40 and 20, the list now becomes 20, 10, 40, and 90.
+
+So you now understand why there is a need for a swap inside the while loop. But this swap is only necessary when an element lesser than 40 is encountered.
+
+Okay. What if the list is: 40, 10, 20, 90?
+There is no 90 to swap.
+Yes, there is no 90 to swap so you may say the swapping code isn't necessary.
+But remember that we're not working with one list but with multiple kind of list.
+If swapping is not necessary for this list, how about the list it is necessary for?
+An algorithm is not complete if it fails for some data set. You need to keep tweaking the algorithm until it works for all data sets. 
+
+
+Now that I have some understanding of the quick sort algorithm, can I now code it incrementally?
+
+What I've noticed is that if you can't solve the problem via hand tracing, it means you don't yet understand the solution. At least, some parts of it are not clear yet.
+You need to be able to work out the algorithm on paper while running a sample data set though it.
+
+Given this data set, we will do this, this will happen, it will lead to this...
+By the time you finish the explanation, the problem should have been solved. You will then confirm the paper solution by jumping on the IDE.
+You will then pick up a variant of the data set, repeat the procedure, pick up the IDE and verify things.
+
+So in checking to see I now know how to implement quick sort, I don't need a terminal.
+I can solve it right here.
+
+Given the data set 30, 10, 50, 20, 70 how do you sort it using quick sort?
+
+Well, we will sort it by picking a pivot element and moving elements lesser than the pivot to the left of it and elements higher than the pivot to the right of it.
+
+Let's assume a pivot of 30, elements less than it are 10 and 20. Elements greater than it are 50 and 70.
+We will move 10 and 20 to the left of 30 and 50 and 70 to the right of 30. The list will now be 10, 20, 30, 50, 70.
+
+This is the general idea, but the devil is in the detail.
+
+Next, we will move the elements given the pivot 30.
+In moving the elements, we will iterate through the elements to be moved and check if they are lesser than the pivot.
+When an element lesser than the pivot is encountered, that element will later be swapped with the pivot element outside the loop.
+But because there might be more than one element lesser than the pivot in the data set, only the most recently encountered lesser element will be swapped with the pivot.
+What then happens to the previously encountered lesser elements?
+First of all, let's not get ahead of ourselves.
+Let's implement for just this data set.
+When we introduce another data set, we will tweak the solution.
+Therefore, the previously encountered lesser elements will be ignored. 
+By the way, if we run the solution and it doesn't lead to the expected output, we will fix things. 
+
+Now, at the end of the imaginary loop, the element most recently lesser than pivot will be 20. If 20 is swapped with 30, the list becomes 20, 10, 50, 30, and 70. 
+The second time the loop runs 20 will be the pivot. Which element will be lesser than 20? Just 10.
+When a swap is made, the list becomes 10, 20, 50, 30, and 70. 
+If you look at the list, we only need to swap 30 with 50 for the list to be sorted. But let's focus on what we're doing. 
+
+The third time the loop will run, 10 will be the pivot. 
+When 10 is the pivot, no element in the list is less than 10, swapping pivot with 10 won't change anything. 
+If we don't move pivot one character forward, the loop becomes dead. It will keep running and nothing will be changing. 
+At this point, we need to move the pivot to the next character in the list. Which is 20. 
+In the list too, from range 20 to 70, no element is less than 20, we will move the pivot to the next character 50. 
+When pivot is 50, the loop will operate on 30 and 70. 30 is less than 50, so outside the loop, 30 will be swapped with 50. The list effectively becomes 10, 20, 30, 50, 70.
+
+Question, how do we know that we are done with the swapping? How do we know that all the elements are in their sorted position? How do we stop the loop from going another round? 
+Well, we can make the create a recursive solution that terminates when pivot == None. 
+Will pivot ever be None? 
+I'm not sure. 
+Pivot will be None at some point. 
+Yes. It will be. Since when pivot is 70, pivot next node will be None. 
+I'm already seeing some potential issues but let's suspend all of that for another data set. We will tweak the solution when another data set necessitates it. 
+
+def partition(start):
+	pivot = start 
+	left = start 
+	right = start.next
+	while right:
+		if right.node_data < pivot:
+			left = right.node_data
+		right = right.next_node 
+	pivot.node_data = left.node_data 
+	left.node_data = start.node_data 
+	return left
+
+def sort_list(start, end):
+	if start != end:
+		pivot = partition(start)
+		sort_list(start, pivot)
+		sort_list(pivot.next_node, None)
+
+See the way I'm scared the list won't sort. 
+
+The list sorted, but after fixing some typo error. Errors such as writing next instead of next_node. 
+I didn't get the part of swapping the pivot node and the left node correctly. 
+I needed to first store the data of both nodes before doing the swap. 
+If I don't want to do that, I can go the Pythonic way. But going the Pythonic way using tuple unpacking won't teach me how to do such swaps. 
+
+def partition(start):
+    pivot = start 
+    left = start 
+    right = start.next_node
+    while right:
+        if right.node_data < pivot.node_data:
+            left = right
+        right = right.next_node
+    pivot_data = pivot.node_data
+    left_data = left.node_data
+    pivot.node_data = left_data
+    left.node_data = pivot_data
+    return left
+
+def sort_list(start, end):
+	if start != end:
+		pivot = partition(start)
+		sort_list(start, pivot)
+		sort_list(pivot.next_node, None)
+
+Next, we will run another data set on the solution to see the gaps. 
+
+30, 10, 70, 20, 50 
+
+Given the above list, pivot is 30, end is None. 
+The partition function will be called. 
+By the time the while loop finishes running, left will be 20. 
+By the time the partition function returns, left would have been swapped with pivot effectively making the list to be 20, 10, 70, 30, 50. 
+By this, left will be 30 and pivot will be 20.
+Next, the sort_list function will be called again. This time around start will be 20 and end will be 30.
+Since 20 and 30 are not equal, the partition function will be called. 
+
+In the this iteration of the loop, pivot will be 20. By the time the while loop finishes running, left will be 10. 
+By the time the partition function returns, left would have been swapped with pivot effectively making the list to be 10, 20, 70, 30, 50.
+By this, left is 20 and pivot is 10.
+Next, the sort_list function will be called again with 10 as start and 20 as end. Because the end is 20 and start is 10, the new call to the sort list function will go through. The partition function will be called again. 
+In this iteration of the loop, pivot will be 10. Because there are no elements lower than 10, pivot and left will remain 10. 
+
+The sort list function will be called with 10 as start and 10 as end but this time around the partition function won't get a chance to be called. 
+The sort_list function will return. 
+When it returns, the third statement calling the sort_list function will be executed. 
+The start argument for the function will be 20 while the end argument will be None. 
+Because of the start argument, pivot inside the partition function will be 20. 
+Because there are no elements after 20 lesser than 20, left and pivot will be 20. 
+Next, the second statement calling the sort_list function will be called again. 
+It will be passed 20 as start and 20 as end. 20 is currently the head node, 20 is as well the value returned as left (pivot) which would be the new end. 
+
+Because start is 20 and end is 20, second call to the sort list function will return and execution will move to the third statement. 
+The start argument for the third statement will be 70 (next of 20) while the end argument will be None. 
+In this iteration of the loop, pivot will be 70. 
+By the time the while loop finishes running, left will be 50. 
+By the time the partition function returns, left would have been swapped with pivot effectively making the list to be 10, 20, 50, 30, 70.
+The partition function will return and a call will be made to the second statement calling the sort_list function. What will be the start and end arguments? 
+The start argument will be the current value of start and the end argument will be the returned left node. 
+The current value of start has been swapped to 50 while the returned left node is 70.
+Pivot in the call to the partition function will therefore be 50. Are there elements after 50 less than 50?
+Yes. 30 is less than 50.
+By the time the loop finishes executing, left will be 30. 
+By the time the partition function is returned, 30 would have been swapped with 50. 
+The list will be 10, 20, 30, 50, 70.
+Returned left will be 50.
+Current value of start will be 30.
+
+There will be another call to the sort list function and the call to the partition function will go through. 
+There will be no swap, but the returned left will be 30.
+There will be another call to the sort list function but the call won't go through. 
+
+The third sort list will be called and 50 will be the new value of start while end will be None. 
+The call to the partition function will be made, there will be no swap, returned left will be 50.
+
+There will be another call to the sort list function but the call won't go through. 
+The third sort list will be called and 70 will be the new value of start while end will be None.
+The call to the partition function will be made, there will be no swap, returned left will be 70.
+
+There will be another call to the sort list function but the call won't go through. 
+The third sort list will be called and None will be the new value of start while end will be None.
+
+
+The algorithm works but is running more laps than it should be running.
+Besides, we are creating a divide and conquer algorithm, so the while loop in the partition function should be terminating as soon as we get to the previous pivot. 
+
+
+from singly_linked_list import SinglyLinkedList
+
+def partition(start, end):
+    pivot = start 
+    left = start 
+    right = start.next_node
+    print("pivot", pivot.node_data)
+    while right != end:
+        if right.node_data < pivot.node_data:
+            left = right
+        right = right.next_node
+    pivot_data = pivot.node_data
+    left_data = left.node_data
+    pivot.node_data = left_data
+    left.node_data = pivot_data
+    return left
+
+def sort_list(start, end):
+    #if start:
+        #print("start ", start.node_data)
+    #else:
+        #print("start ", start)
+    #if end:
+        #print("end ", end.node_data)
+    #else:
+        #print("end ", end)
+
+    if start != end:
+        pivot = partition(start, end)
+        #print("second count")
+        sort_list(start, pivot)
+        #print("third count")
+        sort_list(pivot.next_node, end)
+
+mylist = SinglyLinkedList()
+mylist.add_first(30)
+mylist.add_last(10)
+mylist.add_last(70)
+mylist.add_last(20)
+mylist.add(50)
+
+sort_list(mylist.head_node, None)
+for i in mylist:
+	print(i)
+
+

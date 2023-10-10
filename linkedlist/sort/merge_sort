@@ -1,0 +1,68 @@
+The recursive implementation of the merge_sort function in Python is producing behaviours that with my current knowledge of recursion in python, I can't explain it.
+I'll therefore pass up writing explanations for merge sort for now.
+
+The below were what I wrote so far:
+
+Just like we did previously, we will use a sample data set to work out the codes.
+
+30, 10, 50, 20, 70
+
+Given the above, fast and slow node will be 30.
+
+While the next node of fast node has a value and the node after the next node of fast node also has a value, iterate through the data set and assign the next node of slow node to slow node and the next node of the next node of fast node to fast node.
+
+At the end, return slow node.
+Okay, we are only doing that to fast node to move the pointer of fast node to the next node.
+The purpose of the function is to get the slow node.
+A slow node is not a slow node in the metaphorical sense.
+It is instead a node that has been configured to be one node less than the first node.
+Why is it being made one node less than the fast node?
+
+All the same, let's run through the loop to see for ourselves.
+
+30, 10, 50, 20, 70
+
+For the above data set, the loop will terminate in the first iteration.
+Why?
+Because fast node next will be 10, while fast node next.next will be 50 in the first iteration of the loop. In the second iteration of the loop, fast node next will be None. This is because fast node would have been moved to point to 50.
+If it has been moved to 50, then fast node next will be 20 and fast node next.next will be 70.
+This means there are two iterations for the data set.
+
+In the first iteration, what will be the value of slow node? Slow node will be 10.
+In the second iteration, slow mode will be 50.
+50 is therefore the middle node.
+What do we do when we have the middle node?
+
+When we have the middle node, we will store the node in a variable and set the next node of the middle node to None. At the moment, it's 20.
+Next node of 50 is now none. 
+After setting its next node to None, we will call the merge_sort function again which effectively calls the find middle node function again.
+When this is done, the middle node function will be working with the list 30, 10, 50.
+The while loop will iterate through the list. Fast node next will be 10. Fast node next.next will be 50. Slow node will be 10.
+The loop will increment fast node to 50. But because the next node of 50 is none, the loop will terminate and the value of slow node 10 will be returned.
+
+10 will be the middle node of the sub list.
+We will store the node in a variable and set the next node of the middle node to None. At the moment, it's 50.
+
+Next node of 10 is now none. 
+After setting its next node to None, we will call the merge_sort function again which effectively calls the find middle node function again.
+When this is done, the middle node function will be working with the list 30, 10.
+Fast will be 30. Slow will be 30. Fast.next will be 10 but fast.next.next will be None.
+So 30 will be returned as middle node.
+We will store the node in a variable and set the next node of the middle node to None. At the moment, it's 10.
+
+30 is currently the left head and it's next node has been set to None. 
+
+After setting its next node to None, we will call the merge_sort function again since the next node of 30 is none, the recursion of the merge_sort function will be exited.
+Merge_sort will now be evoked for right head. 10 will be supplied as argument. The function will return immediately since next node of 10 is none. The function will return 10. Right head will be 10. 
+
+Execution will move to merge_sorted. 
+Left head will be 30 and right head will be 10. Left head is not less than or equal to right head. Result will therefore be right head 10. 
+To assign next node to the 10, we will evoke the merge_sorted function and whatever is returned will be the next node of 10. 
+The function will be called such that the first argument will be the left head and the second argument will be the next node of the right head. Left head is 30. Next node of the right head 10 is none. 
+Since one of both arguments is None, the function will return 30. 
+Next node of 10 will now be 30.
+
+The merge_sorted function will return control to the merge_sort function. 
+It will go backwards to immediately after left head call to merge_sort and begin execution. Right head call to merge sort will be executed again.
+
+

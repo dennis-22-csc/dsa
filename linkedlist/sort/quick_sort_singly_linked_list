@@ -1,0 +1,208 @@
+Next, we look at quick sort.
+Quick sort uses a divide and conquer approach to sorting data structures.
+I recently became exposed to something called incremental development where scaffolds are added to each step of the development process. I'll use this quick sort function to practice it only a complex function.
+What will be the first step?
+The first step would have been easier if the quick sort function retruns a value. Instead, what it does is internally manipulate a data structure.
+But let's try and understand things. What are we creating?
+We are creating a function that uses the divide and conquer approach to sort a linked list.
+The function when called will call an internal recursive function. The internal recursive function is a function that calls itself repeatedly until a condition becomes false.
+We will start by defining the function quick_sort and the recursive function. For now, the recursive function won't be recursive.
+Okay, but I feel you should have the details of the quick_sort function sorted first before creating it. If possible, hand trace everything all steps of the way.
+Okay. Let's give this a try.
+I'll need to use a combination of handtracing and scaffolding to understand the function.
+But what I've learnt so far is that the sorting is actually done in the partition function.
+So now I need to via scaffolding confirm certain assumptions about the partition function.
+
+Starter codes
+from singly_linked_list import SinglyLinkedList
+
+
+mylist = SinglyLinkedList()
+mylist.add_first(40)
+mylist.add_last(20)
+mylist.add_last(90)
+mylist.add(10)
+
+for i in mylist:
+    print(i
+    
+
+Modified codes to confirm the assumptions in iteration 1
+from singly_linked_list import SinglyLinkedList
+
+def partition(start, end):
+    pivot = start
+    pivot_data = start.node_data
+    left = start
+    right = start.next_node
+
+    count = 0
+    while right != end:
+        count += 1
+        if count == 1:
+            print("left node initial: node ", left.node_data)
+            print("right node initial: node ", right.node_data)
+            print("end node: ", end)
+            print("pivot data: ", pivot_data)
+        if right.node_data < pivot_data:
+            left = left.next_node
+            left.node_data, right.node_data = right.node_data, left.node_data
+            if count == 1:
+                print("left node modified: node ", left.node_data)
+                print("left node data modified: ", left.node_data)
+                print("right node data modified: ", right.node_data)
+        right = right.next_node
+        if count == 1:
+            print("right node next node: node ", right.node_data)
+            break
+
+    pivot.node_data, left.node_data = left.node_data, pivot.node_data
+    print("pivot node modified: node ", pivot.node_data)
+    print("left node final: node ", left.node_data)
+    return left
+
+mylist = SinglyLinkedList()
+mylist.add_first(40)
+mylist.add_last(20)
+mylist.add_last(90)
+mylist.add(10)
+
+partition(mylist.head_node, None)
+for i in mylist:
+    print(i)
+    
+Output
+left node initial: node  40
+right node initial: node  20
+end node:  None
+pivot data:  40
+left node modified: node  20
+left node data modified:  20
+right node data modified:  20
+right node next node: node  90
+pivot node modified: node  20
+left node final: node  40
+List: 20, 40, 90, 10
+
+In my hand trace, I said right node data modified is 40. It should be 20. What is being swapped with the right node data is the modified left node data 20 which is the next node of the previous left node.
+
+
+from singly_linked_list import SinglyLinkedList
+
+def partition(start, end):
+    pivot = start
+    pivot_data = start.node_data
+    left = start
+    right = start.next_node
+
+    count = 0
+    while right != end:
+        count += 1
+        if count == 2:
+            print("left node initial: node ", left.node_data)
+            print("right node initial: node ", right.node_data)
+            print("end node: ", end)
+            print("pivot data: ", pivot_data)
+        if right.node_data < pivot_data:
+            left = left.next_node
+            left.node_data, right.node_data = right.node_data, left.node_data
+            if count == 2:
+                print("left node modified: node ", left.node_data)
+                print("left node data modified: ", left.node_data)
+                print("right node data modified: ", right.node_data)
+        right = right.next_node
+        if count == 2:
+            print("right node next node: node ", right.node_data)
+            break
+
+    pivot.node_data, left.node_data = left.node_data, pivot.node_data
+    print("pivot node modified: node ", pivot.node_data)
+    print("left node final: node ", left.node_data)
+    return left
+
+mylist = SinglyLinkedList()
+mylist.add_first(40)
+mylist.add_last(20)
+mylist.add_last(90)
+mylist.add(10)
+
+partition(mylist.head_node, None)
+for i in mylist:
+    print(i)
+    
+Output
+left node initial: node  20
+right node initial: node  90
+end node:  None
+pivot data:  40
+right node next node: node  10
+pivot node modified: node  20
+left node final: node  40
+List: 20, 40, 90, 10
+
+My assumptions for iteration 2 is correct. Where I got stuck is iteration 3. Let's see what the output will be.
+
+from singly_linked_list import SinglyLinkedList
+
+def partition(start, end):
+    pivot = start
+    pivot_data = start.node_data
+    left = start
+    right = start.next_node
+
+    count = 0
+    while right != end:
+        count += 1
+        if count == 3:
+            print("left node initial: node ", left.node_data)
+            print("right node initial: node ", right.node_data)
+            print("end node: ", end)
+            print("pivot data: ", pivot_data)
+        if right.node_data < pivot_data:
+            left = left.next_node
+            left.node_data, right.node_data = right.node_data, left.node_data
+            if count == 3:
+                print("left node modified: node ", left.node_data)
+                print("left node data modified: ", left.node_data)
+                print("right node data modified: ", right.node_data)
+        right = right.next_node
+        if count == 3:
+            if right:
+                print("right node next node: node ", right.node_data)
+            else:
+                print("right node next node: ", right)
+            break
+
+    pivot.node_data, left.node_data = left.node_data, pivot.node_data
+    print("pivot node modified: node ", pivot.node_data)
+    print("left node final: node ", left.node_data)
+    return left
+
+mylist = SinglyLinkedList()
+mylist.add_first(40)
+mylist.add_last(20)
+mylist.add_last(90)
+mylist.add(10)
+
+partition(mylist.head_node, None)
+for i in mylist:
+    print(i)
+    
+Output
+left node initial: node  20
+right node initial: node  10
+end node:  None
+pivot data:  40
+left node modified: node  10
+left node data modified:  10
+right node data modified:  90
+right node next node:  None
+pivot node modified: node  10
+left node final: node  40
+List: 10, 20, 40, 90
+
+In my hand trace, i got left node modified wrong. I said node 40 when it should be node 10. How did left node became 10 in the third iteration of the loop? To find out, we need to find the value of left node in the second iteration of the loop. The value is 20. In the list, what is the next node of 20? You're the one that didn't add the print statement in the correct place. You added it after the swap which means left node will be 10.
+If left node modified is 90, how did left node that was last 20 change to 90? Is 90 the next node of 20? In the original list, yes. But in the modified list, no.
+So I guess at the time the while loop is running, the list has a different state. For you to know the state, you need to return in each iteration.
+
+I also got right node data wrong. I said 40 when it should be 90.

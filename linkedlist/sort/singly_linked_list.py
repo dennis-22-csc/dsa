@@ -8,7 +8,6 @@ class SinglyLinkedList:
         self.head_node = None
         self.current_node = None
         self.count = 0
-
     def add(self, data):
         if not self.head_node:
             new_node = Node(data)
@@ -83,4 +82,4 @@ class SinglyLinkedList:
                 temp_node.next_node = temp_node.next_node.next_node
                 return
             temp_node = temp_node.next_node
-            count += 1 
+            count += 1
