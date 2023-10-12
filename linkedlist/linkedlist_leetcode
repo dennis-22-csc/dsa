@@ -3,7 +3,6 @@ Linkedlist Leetcode problems(https://leetcode.com/tag/linked-list/)
 Insert 
 1. Populating Next Right Pointers in Each Node(https://leetcode.com/problems/populating-next-right-pointers-in-each-node) Medium 
 2. Populating Next Right Pointers in Each Node II(https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii) Medium 
-3. Insertion Sort List(https://leetcode.com/problems/insertion-sort-list) (Medium) 
 4. Insert into a Sorted Circular Linked List(https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list) Medium 
 
 Partition 
@@ -14,7 +13,18 @@ Sort
 1. Reorder List(https://leetcode.com/problems/reorder-list) Medium 
 2. Sort List(https://leetcode.com/problems/sort-list) Medium 
 3. Sort Linked List Already Sorted Using Absolute Values(https://leetcode.com/problems/sort-linked-list-already-sorted-using-absolute-values) Medium 
+4. Insertion Sort List(https://leetcode.com/problems/insertion-sort-list) (Medium) 
 
+Reverse 
+1. Reverse Linked List(https://leetcode.com/problems/reverse-linked-list) Easy 
+2. Swap Nodes in Pairs (https://leetcode.com/problems/swap-nodes-in-pairs) Medium 
+3. Rotate List (https://leetcode.com/problems/rotate-list) Medium 
+4. Reverse Linked List II(https://leetcode.com/problems/reverse-linked-list-ii) Medium 
+5. Swapping Nodes in a Linked List(https://leetcode.com/problems/swapping-nodes-in-a-linked-list) Medium
+6. Print Immutable Linked List in Reverse
+(https://leetcode.com/problems/print-immutable-linked-list-in-reverse) Medium 
+7. Reverse Nodes in Even Length Groups(https://leetcode.com/problems/reverse-nodes-in-even-length-groups) Medium 
+8. Reverse Nodes in k-Group (https://leetcode.com/problems/reverse-nodes-in-k-group) Hard
 
 Merge 
 1. Merge Two Sorted Lists (https://leetcode.com/problems/merge-two-sorted-lists) Easy 
@@ -52,16 +62,6 @@ Find
 9. Find the Minimum and Maximum Number of Nodes Between Critical Points(https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points) Medium 
 10. Maximum Twin Sum of a Linked List(https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list) Medium 
 
-Reverse 
-1. Reverse Linked List(https://leetcode.com/problems/reverse-linked-list) Easy 
-2. Swap Nodes in Pairs (https://leetcode.com/problems/swap-nodes-in-pairs) Medium 
-3. Rotate List (https://leetcode.com/problems/rotate-list) Medium 
-4. Reverse Linked List II(https://leetcode.com/problems/reverse-linked-list-ii) Medium 
-5. Swapping Nodes in a Linked List(https://leetcode.com/problems/swapping-nodes-in-a-linked-list) Medium
-6. Print Immutable Linked List in Reverse
-(https://leetcode.com/problems/print-immutable-linked-list-in-reverse) Medium 
-7. Reverse Nodes in Even Length Groups(https://leetcode.com/problems/reverse-nodes-in-even-length-groups) Medium 
-8. Reverse Nodes in k-Group (https://leetcode.com/problems/reverse-nodes-in-k-group) Hard
 
 Conversion 
 1. Convert Sorted List to Binary Search Tree(https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree) Medium 

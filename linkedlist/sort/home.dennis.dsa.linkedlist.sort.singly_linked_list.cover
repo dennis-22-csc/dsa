@@ -1,0 +1,85 @@
+    2: class Node:
+    1:     def __init__(self, node_data, next_node=None):
+    5:         self.node_data = node_data
+    5:         self.next_node = next_node
+       
+    2: class SinglyLinkedList:
+    1:     def __init__(self):
+    1:         self.head_node = None
+    1:         self.current_node = None
+    1:         self.count = 0
+    1:     def add(self, data):
+    2:         if not self.head_node:
+    1:             new_node = Node(data)
+    1:             self.head_node = new_node
+    1:             self.count += 1
+    1:             return
+    1:         self.add_last(data)
+    1:         self.count += 1
+       
+    1:     def add_first(self, data):
+    1:         if not self.head_node:
+                   self.add(data)
+                   return
+    1:         new_node = Node(data, self.head_node)
+    1:         self.head_node = new_node
+    1:         self.count += 1
+       
+    1:     def add_last(self, data):
+    3:         if not self.head_node:
+                   self.add(data)
+                   return
+    3:         temp_node = self.head_node
+    9:         while temp_node.next_node:
+    6:             temp_node = temp_node.next_node
+    3:         new_node = Node(data)
+    3:         temp_node.next_node = new_node
+    3:         self.count += 1
+       
+    1:     def __iter__(self):
+               self.current_node = self.head_node
+               return self
+       
+    1:     def __next__(self):
+               if not self.current_node:
+                   raise StopIteration
+               data = self.current_node.node_data
+               self.current_node = self.current_node.next_node
+               return data
+       
+    1:     def add_at_index(self, data, index):
+               count = 1
+               temp_node = self.head_node
+               if index > self.count:
+                   raise IndexError("Index out of range")
+               if index == 0:
+                   new_node = Node(data, temp_node)
+                   self.head_node = new_node
+                   self.count += 1
+                   return
+               while temp_node.next_node:
+                   if count == index:
+                       new_node = Node(data, temp_node.next_node)
+                       temp_node.next_node = new_node
+                       self.count += 1
+                       return
+                   temp_node = temp_node.next_node
+                   count += 1
+               new_node = Node(data, temp_node.next_node)
+               temp_node.next_node = new_node
+               self.count += 1
+       
+    1:     def delete_at_index(self, index):
+               count = 1
+               temp_node = self.head_node
+               if index >= self.count:
+                   raise IndexError("Index out of range")
+               if index == 0:
+                   self.head_node = temp_node.next_node
+                   return
+               while temp_node.next_node:
+                   if count == index:
+                       temp_node.next_node = temp_node.next_node.next_node
+                       return
+                   temp_node = temp_node.next_node
+                   count += 1

@@ -1,0 +1,383 @@
+Given the head of a singly linked list represented as:
+L0 -> L1 -> L2 -> Ln-1 -> Ln
+
+Where L0 is the head node, L1 is the second node. L2 is the third node. Ln-1 is the second to the last node. Ln is the last node.
+
+The list will be re-arranged such that it will be of the following form:
+L0 -> Ln -> L1 -> Ln-1 -> L2 -> Ln-2 -> etc.
+
+You shouldn't change the values. Instead, re-arrange the nodes themselves.
+
+Example list
+
+1, 2, 3, 4
+
+Ordered list:
+1, 4, 2, 3
+
+Example list
+1, 2, 3, 4, 5
+
+Ordered list
+1, 5, 2, 4, 3
+
+Whatever solution you come up with needs to work with any range of list.
+
+Well, I feel we can use two pointer to approach this problem.
+One pointer will start from the head of the first half. The other pointer will start from the tail of the right half.
+We will partition the list into two halfs.
+But how do we start from the tail of the right half when it is a singly linked list?
+A singly linked list doesn't have a previous node. 
+
+It's easy for us to move from left to right. In fact, we can only move from left to right.
+To cut the traversal time, we will only move through the right half.
+So we will be moving from left to right in the right half.
+But when we move, what are we to be doing?
+Because what we need is the last node when the other half is in the head node.
+We can easily access the last node, but how do we access the node prior to the last node?
+Okay. Given the last node, how do we navigate to the head node in a singly linked list? The last node has a next node that points to none and doesn't have a previous node.
+Can we create a new list from the right half where the last node is the head node? 
+If that will solve the problem, why not? 
+Using the add to first method, we can easily create the list. 
+
+So now, we will receive the head node. Using the head node, we will partition the list into two halfs. Then we will create a new list from the right half where the last node of the right half becomes the head node of the new list. 
+Next, we will use two pointers to access elements from the left half and the new list and store them in a new list. We will return the new list. 
+
+How do we partition the original list? 
+We will find the middle node. 
+Given a list of four elements 1, 2, 3, 4, the middle node is 2. 2 will be made to point to none. 3 is the head node of the right half. 
+Given a list of five elements 1, 2, 3, 4, 5, the middle node is 3. 3 will be made to point to none. 4 will be the head node of the right half. But the left half will be one element more than the right half. 
+How do you find the middle node? 
+The find_middle_node function in the solution of merge_sort does this. Sadly, I don't remember how it did it. 
+I'll need to review the notes.
+
+When I thought about how I could get the middle node, I was already thinking about things like getting the number of elements in the list, dividing it by 2, and using the result on a function get element by index. The solution will work, but it's a long journey to finding the middle node.
+Using two pointers, we can easily find the middle node.
+What we basically need to do to understand how two pointers can be used to solve the problem is to write out the list and circle the middle element.
+So for the list 30, 10, 50, 20, 70, what is the middle element? The middle element is 50.
+This list is an even list.
+For the list 30, 10, 50, 20, 70, 100, 45, 40, 80, what is the middle element? The middle element is 70.
+This list is an even list.
+For the list 30, 10, 50, 20, 70, 100, 45, 40, 80, 15 what is the middle element? The middle element is 70.
+This list is an odd list.
+For the first list, to get the number 50, we need to move two two steps from the beginning of the list.
+For the second list, we need to move four steps from the beginning of the list.
+For the third list, we still need to move four steps from the beginning of the list.
+We can easily move to each element by defining a variable and reassigning the variable in each iteration of the loop.
+But the challenge is exiting the loop.
+For the first list, the loop needs to exit as soon as 50 is what is in the variable we defined.
+For the second and third list, the loop needs to exit as soon as 70 is what is in the variable.
+How do we make the loop exit at each of these stages?
+The variable controlling the list will be defined such that when we are at 50, it will be pointing to none. 
+Let's assume the variable starts with the value 10, this means in each iteration of the loop, when the variable to hold the middle element is at 10, it should be at 50. But if the variable holding the middle element is at 50, it should be at None. 
+Well, we can easily achieve it if the loop is defined such that it only runs when the variable has a next node and a next next node. By so doing, at the first iteration, there will be a next node of 10 and a next next node of 50 and the variable holding the middle element will be at 10. 
+To ensure that there are only two iterations... 
+So basically, what we need to do is ensure that there are only two iterations. When the loop attempts to go on a third iteration, it should exit. 
+In the first iteration of the loop, the value 10 will be assigned to the variable holding the middle element. 
+In the second iteration, the value 50 should be assigned. 
+In the third iteration, the loop should exit. 
+To achieve this, we will use next next node to control the loop. In the first iteration of the loop, the controlling value should be 50. In the second iteration of the loop, the controlling value should be 70. In the third iteration, the controlling value will be None. 
+Where next comes in is that you also need to check that next has a value before you can check that next next has a value. Lest, you will get None type errors. Because when you evoke next next and next is None, expect None type error. 
+
+Learnings:
+To get the middle node of a singly linked list, you just need to move a few steps to that element while ensuring that when you get to the element, you exit the loop and return the element. You don't need to get the length of the list and do some maths and do some index retrieval.
+
+def find_middle_node(head_node):
+	slow_node = head_node
+	fast_node = head_node
+	while fast_node.next_node and fast_node.next_node.next_node:
+		slow_node = slow_node.next_node
+		fast_node = fast_node.next_node.next_node
+	return slow_node
+	
+	
+Given the above find_middle_node function, how do we reorder the list how we want it to be ordered?
+1, 2, 3, 4
+We've received the head_node 1, we've used the find_middle_node function to get the middle node 2.
+Next, we will store the next node of 2 in a variable, we will then assign None as the next node of 2.
+We will then proceed to use the previous next node of 2 to create a new list.
+We will define a function that takes the node as argument and return a new list.
+Internally, we will start by creating an empty list.
+We will then loop through the right half starting with the injected node.
+The loop will be defined such that a temp variable needs to have a value. The temp variable will start with the value of the injected node. In each iteration of the loop, the temp variable will be reassigned the next node of the current node. At some point in the execution of the loop, the next node of the current node will be None which means none will be assigned to the temp variable. Then when the loop is to go on its next iteration, it will exit.
+Now, in each iteration of the loop, the add first method of the SinglyLinkedList class will be called. This means at the end of the loop, the right list 3 and 4 would have changed to 4 and 3 and would be returned.
+
+def get_new_right(right_head):
+	new_list = SinglyLinkedList
+	current_node = right_head
+	while current_node.next_node:
+		new_list.add_first(current_node.node_data)
+		current_node = current_node.next_node 
+	return new_list.head_node
+	
+When we've returned the new list head node, control will go back to the order list function. 
+
+We now have a right list whose head node is the last node of the previous right list.
+We will next call a function that will return the ordered list.
+The function will take two arguments - the head node of the left list and the head node of the right list.
+Internally, we will define an empty list.
+We will define a left and right variable.
+Left variable will hold the injected head node of the left list.
+Right variable will hold the infected head node of the right list.
+We want to iterate through both lists using their head nodes.
+But there will be a challenge - for the occasions when left list will be one element higher than the right list.
+That is, when left list still has a value, right list will be None. We can let the loop terminate then outside the loop check if the left list still has a value. If it does, we will append the value to the new list before returning the new list.
+Okay. So in the loop, we will add the node of the left list to the new list first, followed by the node of the right list, then we will move the left and right pointers to the next nodes.
+
+def order_halves(left_head, right_head):
+	new_list = SinglyLinkedList()
+	left = left_head
+	right = right_head
+	while left and right:
+		new_list.add_last(left.node_data)
+		new_list.add_last(right.node_data)
+		left = left.next_node 
+		right = right.next_node
+	if left:
+		new_list.add_last(left.node_data)
+	return new_list
+	
+def order_list(head_node):
+	mid_node = find_middle_node(head_node)
+	mid_node_next = mid_node.next_node
+	mid_node.next_node = None
+	left_head = head_node
+	right_head = get_new_right(mid_node_next)
+	return order_halves(left_head, right_head)
+	
+	
+	
+	
+The logic worked!
+
+from singly_linked_list import SinglyLinkedList
+
+def print_list(head):
+    if head is None:
+        print(' ')
+        return
+    curr_node = head
+    while curr_node:
+        print(curr_node.node_data, end = " ")
+        curr_node = curr_node.next_node
+    print(' ')
+    
+def find_middle_node(head_node):
+	slow_node = head_node
+	fast_node = head_node
+	while fast_node.next_node and fast_node.next_node.next_node:
+		slow_node = slow_node.next_node
+		fast_node = fast_node.next_node.next_node
+	return slow_node
+	
+def get_new_right(right_head):
+	new_list = SinglyLinkedList()
+	current_node = right_head
+	while current_node:
+		new_list.add_first(current_node.node_data)
+		current_node = current_node.next_node 
+	return new_list.head_node
+	
+def order_halves(left_head, right_head):
+	new_list = SinglyLinkedList()
+	left = left_head
+	right = right_head
+	while left and right:
+		new_list.add_last(left.node_data)
+		new_list.add_last(right.node_data)
+		left = left.next_node 
+		right = right.next_node
+	if left:
+		new_list.add_last(left.node_data)
+	return new_list
+	
+def order_list(head_node):
+    mid_node = find_middle_node(head_node)
+    mid_node_next = mid_node.next_node
+    mid_node.next_node = None
+    left_head = head_node
+    right_head = get_new_right(mid_node_next)
+    ordered_list = order_halves(left_head, right_head)
+    return ordered_list.head_node
+	
+mylist = SinglyLinkedList()
+mylist.add_first(1)
+mylist.add_last(2)
+mylist.add_last(3)
+mylist.add_last(4)
+mylist.add(5)
+
+new_head = order_list(mylist.head_node)
+print_list(new_head)
+
+
+
+While it works, I am supposed to be able to order the list without changing the address of the original nodes.
+All the same, let me see how ChatGPT will solve the problem.
+ChatGPT followed the same general idea but in the implementation of the reversing of the second half of the list, we diverged.
+We also probably diverged in the merging of the two halfs.
+Let me work out the details.
+
+while current_node has a value, store the next node of the current node in a temp variable.
+Assign the previous node as the next node of the current node.
+Make the current node the new previous node.
+Make the next node the new current node.
+For step 1, we will have 4 in the temp variable. The next node of 3 will then be made to point to None.
+Previous node will now be 3.
+Current node will now be 4.
+Loop will move to 4.
+Temp will be None.
+4.next will be 3.
+Prev will be 4.
+Current will be None.
+Loop will terminate in the next attempt to iterate.
+This is for 3 and 4. What of for 3, 4, 5, 6, 7?
+Our goal is to change things to 7, 6, 5, 4, 3
+
+For step 1, we will have 4 in the temp variable. The next node of 3 will then be made to point to None.
+Previous node will now be 3.
+Current node will now be 4.
+Loop will move to 4.
+Temp will be 5.
+4.next will be 3.
+Prev will be 4.
+Current will be 5.
+Loop will move to 5.
+Temp will be 6.
+5.next will be 4.
+Prev will be 5.
+Current will be 6.
+Loop will move to 6.
+Temp will be 7.
+6.next will be 5.
+Prev will be 6.
+Current will be 7.
+Loop will move to 7.
+Temp will be None.
+7.next will be 6.
+Prev will be 7
+Current will be None.
+Loop will terminate.
+Prev will be returned.
+7 points to 6, 6 points to 5, 5 points to 4, 4 points to 3, 3 points to None. The list has been effectively reversed without creating a new list.
+
+def get_new_right(right_head):
+	current_node = right_head
+	previous_node = None
+	while current_node:
+		temp_node = current_node.next_node
+		current_node.next_node = previous_node
+		previous_node = current_node
+		current_node = temp_node
+	return previous_node
+	
+	
+Another area our implementation diverged is in the order_halves function. ChatGPT's implementation doesn't create a new list.
+
+I think I now know where I erred. 
+We now have left list 1 and 2 and right list 4 and 3, all I needed was to get both lists ordered without creating a new list is to make node 1 point to node 4 while at the same time making node 4 point to node 2 and node 2 to node 3. 
+Then we will move the loop to... 
+Below is ChatGPT code 
+first, second = head, prev
+    while second.next:
+        temp1, temp2 = first.next, second.next
+        first.next = second
+        second.next = temp1
+        first, second = temp1, temp2
+        
+The code starts by assigning left head 1 to a variable first and right head 4 to a variable second. 
+The loop is then configured to only use variable second as the control variable. 
+Inside the loop, the next nodes of both node first and node second are stored in temp variables. 2 is stored in temp1, 3 is stored in temp2. 
+The first node 1 is now made to point to the second node 4.
+And the second node 4 is now made to point to node 2.
+Variable first is assigned node 2. Variable second is now assigned node 3.
+In the next iteration of the loop...
+There won't be a next iteration of the loop.
+At this point, we have nodes 1, 4, 2. What happened to 3?
+We don't need to do anything about 3 since 2 already points to 3.
+We didn't manipulate the next node of 2 inside the loop. We therefore don't need to do anything about 2.
+
+By the time we finish all of this, our head node will remain and we will use the head node to access the ordered elements.
+
+Now, in ChatGPT's solution, second.next was used to control the loop.
+This is because given two lists 1, 2 and 4, 3, we only need to use one of both as controlling variable.
+How about given two lists 1, 2 and 5, 4, 3?
+If the second list still has a next variable (when the loop is at 4), the first list will no longer have a next variable.
+It doesn't matter.
+
+def order_halves(left_head, right_head):
+	left = left_head
+	right = right_head
+	while right.next_node:
+		next_node_left = left.next_node
+		next_node_right = right.next_node
+		left.next_node = right
+		right.next_node = next_node_left
+		left = next_node_left
+		right = next_node_right
+		
+		
+		
+Combined codes
+from singly_linked_list import SinglyLinkedList
+
+def print_list(head):
+    if head is None:
+        print(' ')
+        return
+    curr_node = head
+    while curr_node:
+        print(curr_node.node_data, end = " ")
+        curr_node = curr_node.next_node
+    print(' ')
+    
+def find_middle_node(head_node):
+	slow_node = head_node
+	fast_node = head_node
+	while fast_node.next_node and fast_node.next_node.next_node:
+		slow_node = slow_node.next_node
+		fast_node = fast_node.next_node.next_node
+	return slow_node
+	
+def get_new_right(right_head):
+	current_node = right_head
+	previous_node = None
+	while current_node:
+		temp_node = current_node.next_node
+		current_node.next_node = previous_node
+		previous_node = current_node
+		current_node = temp_node
+	return previous_node
+	
+def order_halves(left_head, right_head):
+	left = left_head
+	right = right_head
+	while right:
+		next_node_left = left.next_node
+		next_node_right = right.next_node
+		left.next_node = right
+		right.next_node = next_node_left
+		left = next_node_left
+		right = next_node_right
+	
+def order_list(head_node):
+    mid_node = find_middle_node(head_node)
+    mid_node_next = mid_node.next_node
+    mid_node.next_node = None
+    left_head = head_node
+    right_head = get_new_right(mid_node_next)
+    order_halves(left_head, right_head)
+    
+	
+mylist = SinglyLinkedList()
+mylist.add_first(1)
+mylist.add_last(2)
+mylist.add_last(3)
+mylist.add_last(4)
+mylist.add(5)
+
+order_list(mylist.head_node)
+for i in mylist:
+	print(i)
+
+In the order_halves function, I ended up using right instead of right.next_node to control the loop. I made the ChatGPT solution fit into my solution.

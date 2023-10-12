@@ -110,14 +110,16 @@ def merge_sorted(left_head, right_head):
 
     return result
 
-mylist = SinglyLinkedList()
-mylist.add(10)
-mylist.add_first(30)
-mylist.add_last(50)
-mylist.add_last(20)
-mylist.add(70)
-print("calling merge sort")
-new_head = merge_sort(mylist.head_node)
-print("returned merge sort")
-print_list(new_head)
-
+def main():
+    mylist = SinglyLinkedList()
+    mylist.add(10)
+    mylist.add_first(30)
+    mylist.add_last(50)
+    mylist.add_last(20)
+    mylist.add(70)
+    print("calling merge sort")
+    new_head = merge_sort(mylist.head_node)
+    print("returned merge sort")
+    print_list(new_head)
+if __name__ == "__main__":
+    main()
