@@ -1,0 +1,156 @@
+Sort linked list that is already sorted using absolute values
+
+The below is a linked list that is already sorted using absolute values
+
+0 ->2 -> -5 -> 5 -> 10 -> -10
+
+Can you sort it to become the below?
+
+-10 -> -5 -> 0 -> 2 -> 5 -> 10
+
+Given the head of a singly linked list that is sorted in non-decreasing order using the absolute values of its nodes, return the list sorted in non-decreasing order using the actual values of its nodes.
+
+If they are asking this question, it means they expect a specific kind of solution.
+
+I saw the below solution:
+
+def sortLinkedList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        prev, curr = head, head.next
+        while curr:
+            if curr.val < 0:
+                t = curr.next
+                prev.next = t
+                curr.next = head
+                head = curr
+                curr = t
+            else:
+                prev, curr = curr, curr.next
+        return head
+
+I'll say the solution starts by defining variables prev and curr. Assigns the head node to prev and the next node of the head node to curr. 
+It then traverses the nodes using curr. 
+In the loop, the next node of curr is assigned to a variable t. Then t is made the next node of the prev node. Then the head node is made the next node of curr. Then the curr node is made the new head node. The node in variable t is made the new current node. 
+But all these operations in the loop will only be carried out if the next node of the current head node is less than 0, that is, it is a negative number. 
+If it isn't, curr is assigned to prev and curr.next is assigned to curr. 
+
+Now, understand that the list is already sorted. It will be expensive to use traditional sorting algorithms to sort an already sorted list. 
+While the list is already sorted, the negative elements still need to be moved to the left side of the list while the positive elements will remain where they are. 
+How do we move all the negative elements to the left side of the list? 
+We will need to use the data set to understand the code. 
+When the function is called, prev will be initialized to 0 and curr will be initialized to 2.
+In the first iteration of the while loop, curr will be 2.
+Because 2 is not less than zero, 2 will be assigned to prev and -5 will be assigned to curr. 
+The loop will enter its second iteration. 
+curr will be -5. 
+Because -5 is less than 0, we will assign 5 to t. We will then make 5 the next node of the previous node node 2. We will then make the current head 0 the next node of the current node -5.
+We will then change the current node -5 to the new head node.
+We will then change the current node to t. t is 5.
+When curr is 5, there will be no swapping. 5 will be assigned to prev and 10 will be assigned to curr.
+When curr is 10, there will be no swapping. 10 will be assigned to prev and -10 will be assigned to curr.
+When curr is -10, curr will need to be brought before the current head node.
+How do we accomplish this? By making the current head node the next node of current.
+Mehn. Wow. What a solution!
+Why didn't I think of this solution?
+It's because you can't afford the time it would take.
+Some of these solutions came only after days and weeks and months of working on the problem.
+Some just popped in and the programmer pursued the angle.
+When you're learning DSA, you are working within a deadline.
+
+All the same, now I will use this understanding to work out my solution.
+
+Given the below linked list that is already sorted using absolute values
+
+0 ->2 -> -5 -> 5 -> 10 -> -10
+
+To sort it to become the below,
+
+-10 -> -5 -> 0 -> 2 -> 5 -> 10
+
+We need to bring -5 to before 0. We will then bring -10 to before -5.
+But each time we move a negative number, we need to connect the two positive numbers it is in between together.
+But how do we move -5 to be before 0?
+Simple. 0 is currently the head node. Make -5 to be the head node and make it point to 0.
+To also bring -10 to be before -5, make -10 the head node and make it point to -5.
+
+In constructing the loop, we will be iterating through the nodes starting with the second. Why the second and not the first? The second because we won't be moving the head node. We will only be moving the head node when we've traversed another node and there is the need to change the head node.
+The loop therefore doesn't need to start from the head node. But then, even if it does, it won't affect anything.
+
+So we will start with the line:
+
+current_node = head_node.next_node 
+while current_node:
+
+When we've traversed a node, we need to check if it's value is positive or negative.
+If it is negative, we need to make that node the new head node and make it point to the current head node.
+We also need to connect the two nodes it was previously in between.
+
+current_node = head_node.next_node 
+previous_node = head_node
+while current_node:
+	if current_node.node_data < 0:
+		current_next = current_node.next_node
+		current_node.next_node = head_node 
+		head_node = current_node
+		previous_node.next_node = current_next
+		current_node = current_next
+	else:
+		previous_node = current_node
+		current_node = current_node.next_node
+		
+		
+Full code
+
+from singly_linked_list import SinglyLinkedList
+
+def print_list(head):
+    if head is None:
+        print(' ')
+        return
+    curr_node = head
+    while curr_node:
+        print(curr_node.node_data, end = " ")
+        curr_node = curr_node.next_node
+    print(' ')
+
+def absolute_sort(head_node):
+    current_node = head_node.next_node 
+    previous_node = head_node
+    while current_node:
+	    if current_node.node_data < 0:
+		    current_next = current_node.next_node
+		    current_node.next_node = head_node 
+		    head_node = current_node
+		    previous_node.next_node = current_next
+		    current_node = current_next
+	    else:
+		    previous_node = current_node
+		    current_node = current_node.next_node
+    return head_node		
+		
+mylist = SinglyLinkedList()
+mylist.add_first(0)
+mylist.add_last(2)
+mylist.add_last(-5)
+mylist.add_last(5)
+mylist.add(10)
+mylist.add(-10)
+
+new_head = absolute_sort(mylist.head_node)
+print_list(new_head)
+
+
+Given the below list:
+
+10 -> 5 -> -10 -> 0 -> -5 -> 2
+
+How do we sort it based on absolute values to become:
+
+0 -> 2 -> -5 -> 5 -> -10 -> 10
+
+The key to sorting the list is to run the elements through an abs function. The function gets the absolute value of a number. The absolute value of -5 is 5. The absolute value of 5 is 5.
+Once we know we will be running the elements through the abs function, we can easily define a loop to traverse the elements. 
+The loop will check the absolute value of the current element and the absolute value of the next element. If that of the next element is lesser than that of the current element, it means there needs to be a swap. 
+We will swap the data of both elements. 
+If there won't be a swap, we will just move the loop to the next element. 
+After the swap, we will make the current node to be the head node so the loop can run through the elements again from beginning.
+By so doing, if there is a need to move an element further down, it will be moved. 
