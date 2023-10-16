@@ -1,0 +1,80 @@
+def partition(mylist, x):
+    less_head = less_current = Node(0)
+    We initialize a new node and assign it to variable less_current. 
+    We then assign variable less_current to a variable less_head. 
+
+greater_head = greater_current = Node(0)
+We initialize a new node and assign it to a variable greater_current. We then assign variable greater_current to a variable greater_head. 
+
+current = mylist.head_node
+We assign the head node of the list to a variable current. 
+ 
+while current: 
+We iterate through current. 
+
+if current.node_data < x:
+less_current.next_node = current
+less_current = less_current.next_node
+We check if the data of the current node is less than the pivot data. 
+If it is, we make the current node the next node of the new node in less_current. 
+We then replace the node in less_current with the next node of the node previously in less current. 
+By doing that, we can access it and assign another next node to it. 
+For the data set, node 1 will be the next node of node 0.
+Then node 1 will be the new node in less_current. 
+Remember that 1 is less than the pivot 3.
+
+else:
+greater_current.next_node = current
+greater_current = greater_current.next_node
+
+If the current node is not lesser than the pivot, we make the current node the next node of the node in greater_current. 
+We then make that node the new node in greater_current. 
+For the data set, in the second iteration of the loop, node 4 will be the next node of node 0.
+Then node 4 will be the new node in greater_current. 
+Remember that 4 is greater than the pivot 3.
+
+current = current.next_node
+current will be moved to the next node so the next iteration of the loop will operate on the next data. 
+In the third iteration of the loop, current will be 3. Current is not less than the pivot. 3 will become the next node of 4.
+3 will be the new greater_current. 
+Current will move to 2. 2 is less than 3. 2 will become the next node of 1. less_current will be 2.
+Current will move to 5. 5 is greater than 3. 5 will become the next node of 3.
+greater_current will be 5.
+Current will move to 2. 2 is less than 3. 2 will become the next node of 2. less_current will be second node 2.
+Current will become none, loop will be exited. 
+At this point, there are two lists 0, 1, 2, 2
+0, 4, 3, 5
+
+# Connect the two partitions
+less_current.next_node = greater_head.next_node
+The next node of 2 will be 4 (next node of greater_head) 
+    
+greater_current.next_node = None
+We make the next node of greater_current (5) point to none. 
+
+# Update the head_node
+mylist.head_node = less_head.next_node
+
+We make the next node of less_head (1) be the new head of the original list. 
+
+
+mylist = SinglyLinkedList()
+mylist.add_first(1)
+mylist.add_last(4)
+mylist.add_last(3)
+mylist.add_last(2)
+mylist.add(5)
+mylist.add_last(2)
+
+partition(mylist, 5)
+
+for i in mylist:
+	print(i)
+
+When pivot is 5, in the first iteration of the loop, current will remain 1.
+Current is less than 5, 1 will be made to be the next node of 0. 1 will be the new node in lesser_current.
+In iteration 2, current will be 4. 4 is less than 5. 4 will be made to be the next node of 1. 4 will be the new node in lesser_current.
+In iteration 3, current will be 3. 3 is less than 5. 3 will be made the next node of 4. 3 will be the new node in lesser_current.
+In iteration 4, current will be 2. 2 is less than 5. 2 will be made the next node of 3. 2 will be the new node in lesser_current.
+In iteration 4, current will be 5. 5 is not less than 5. 5 will be made the next node of 0 in greater_current. 5 will be the new node in greater_current.
+In iteration 5, current will be 2.

@@ -1,0 +1,128 @@
+86. Partition List
+Given the head of a singly linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+
+You should preserve the original relative order of the nodes in each of the two partitions.
+
+Example:
+
+Input: head = 1->4->3->2->5->2, x = 3
+Output: 1->2->2->4->3->5
+
+In the output, 4 remains where it is. 3 remains after 4. But 2 and 2 are moved from right to left.
+
+Input: head = 1->4->3->2->5->2, x = 5
+Output: 1->4->3->2->2->5
+
+The 2 after 5 was brought to after the 2 after 3.
+The list wasn't sorted in the sense that both 2s were moved to before 4 and 3 was moved to before 4. 
+What we are just being asked to do is move the element on the right lesser than the pivot element to the left. 
+
+Is this a partitioning challenge or a rearrangement challenge?
+I was hoping we would divide the list into two with a node being a pivot - any node. 
+It is a re-arrangment challenge but a specific kind of re-arrangment. 
+
+Given the head of the list 1->4->3->2->5->2 and given the pivot 3, we will iterate through the list and check if the element is lesser than the pivot. 
+If it is, what should we do? 
+We should add that element to a list of elements lesser than the pivot. If it isn't, we should add the element to a list of elements greater than or equal to the pivot. 
+We will then combine the two lists into one and update the head of the original list to be the head of the combined list. 
+
+Assume the data set 1->4->3->2->5->2, and the pivot 3, we should have two lists 1->2->2 and 4->3->5 and a combined list 1->2->2->4->3->5. 
+How do we go about this? 
+We start by creating a function that takes a list as argument. Why we are passing the list as argument is so we can update the head node of the list. 
+By so doing, we won't need to return a new head. 
+We create the function thus:
+def partition_list(mylist)
+
+Inside the function, we will define the head node for the list that would hold nodes lesser than the pivot. We will also define the head node for the list that would hold nodes not lesser than the pivot. 
+We will be using the Node class to create the head node. But why create an head node when you can create a SinglyLinkedList object and add elements to it? 
+We want to preserve the original addresses. 
+If you will be preserving the original addresses, where does creating a new head node come in? 
+While we will be creating a new head node, we will assign the first node of the original list as a next node to the new head node. After we've built the list, we will combine both lists while excluding their head nodes. Their head nodes aren't part of the original list so they shouldn't feature in the combined list. 
+How do we exclude their head nodes? 
+You will see how it is done soon. 
+Back to the task at hand. 
+We want to create two head nodes that will later be excluded from the combined lists. 
+To create the head nodes, we need to create a new node and pass a value into it. 
+What value will we pass into the node? 
+We will pass a value less than the value of the current head node. 
+The value of the current head node is 1. We can pass 0 as the value of the new head nodes, we can as well pass -1. The important thing is that the value is less than the value of the current head node. But then, you can as well pass in the value of the current head node. It won't have adverse effect. 
+We will go with that just for us to see it won't have adverse effect. 
+The function will be modified to the below:
+
+def partition_list(mylist):
+	left_head = Node(mylist.head_node.node_data)
+	right_head = Node(mylist.head_node.node_data)
+	
+Next, we will initialize a variable current_node with the head node. 
+
+def partition_list(mylist):
+	left_head = Node(mylist.head_node.node_data)
+	right_head = Node(mylist.head_node.node_data)
+	current_node = mylist.head_node 
+
+Next, we will define the while loop. 
+
+def partition_list(mylist):
+	left_head = Node(mylist.head_node.node_data)
+	right_head = Node(mylist.head_node.node_data)
+	current_node = mylist.head_node 
+	
+	while current_node:
+	
+What actions will be taking place in the while branch? 
+We will check if the data of the current node is lesser than the pivot. If it is, we will add the current node to the left list by making it the next node of the node currently in the list. 
+If it isn't, we will add the current node to the right list by making it the next node of the node currently in the list. 
+After doing that, we will assign the next node of the current node as the new current node. 
+Issues that will arise: Pivot is not currently a parameter in the function. How do we know the node currently in the two lists? 
+Well, for this second issue, we will also need to have current variables for both lists which would be changed each time a new node is added to the list. 
+
+The function will be modified to the below:
+
+def partition_list(mylist, pivot):
+	left_head = Node(mylist.head_node.node_data)
+	right_head = Node(mylist.head_node.node_data)
+	left_current = left_head
+	right_current = right_head
+	current_node = mylist.head_node 
+	
+	while current_node:
+		if current_node.node_data < pivot:
+			left_current.next_node = current_node
+			left_current = left_current.next_node
+		else:
+			right_current.next_node = current_node
+			right_current = right_current.next_node
+		current_node = current_node.next_node 
+
+With this, we will have two lists each with head nodes containing the data of the head node of the original list.
+Next, we need to combine both lists.
+Assume the data set 1->4->3->2->5->2, and the pivot 3, we should have two lists 1->1->2->2 and 1->4->3->5.
+We want to create a combined list 1->2->2->4->3->5.
+For us to achieve this, we need to make the last node of the left list to point to the second node of the right list. We also need to make the next node of the right list point to None if it currently does not.
+We will then make the head node of the original list to be the second node of the left list.
+This will give us the combined list that we want.
+The last node of the left list will be the value in the left_current variable at the end of the while loop.
+The last node of the right list will also be the value in the right_current variable at the end of the while loop.
+The function will be modified thus:
+
+def partition_list(mylist, pivot):
+	left_head = Node(mylist.head_node.node_data)
+	right_head = Node(mylist.head_node.node_data)
+	left_current = left_head
+	right_current = right_head
+	current_node = mylist.head_node 
+	
+	while current_node:
+		if current_node.node_data < pivot:
+			left_current.next_node = current_node
+			left_current = left_current.next_node
+		else:
+			right_current.next_node = current_node
+			right_current = right_current.next_node
+		current_node = current_node.next_node 
+
+	left_current.next_node = right_head.next_node
+	right_current.next_node = None
+	mylist.head_node = left_head.next_node
+	
+With this, we are done creating the function. 

@@ -6,14 +6,14 @@ Insert
 4. Insert into a Sorted Circular Linked List(https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list) Medium 
 
 Partition 
-1. Partition List(https://leetcode.com/problems/partition-list) Medium 
-2. Split Linked List in Parts(https://leetcode.com/problems/split-linked-list-in-parts) Medium 
+1. Split Linked List in Parts(https://leetcode.com/problems/split-linked-list-in-parts) Medium 
 
 Sort 
 1. Reorder List(https://leetcode.com/problems/reorder-list) Medium 
 2. Sort List(https://leetcode.com/problems/sort-list) Medium 
 3. Sort Linked List Already Sorted Using Absolute Values(https://leetcode.com/problems/sort-linked-list-already-sorted-using-absolute-values) Medium 
 4. Insertion Sort List(https://leetcode.com/problems/insertion-sort-list) (Medium) 
+5. Partition List(https://leetcode.com/problems/partition-list) Medium 
 
 Reverse 
 1. Reverse Linked List(https://leetcode.com/problems/reverse-linked-list) Easy 
