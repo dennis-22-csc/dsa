@@ -1,0 +1,72 @@
+def splitListToParts(root, k):
+        counts = 0
+        each = root
+        while each:
+            counts += 1
+            each = each.next_node
+We will start by calculating the length of the list. This is done by iterating through the nodes and incrementing a variable count. 
+ 
+        num = counts // k
+ 
+ Next, we calculate the minimum size of each part. The idea is that all the parts will have equal number of elements but because the length of the list won't always be even, some parts will have one element more than others, but no part should have more than one element more than others. 
+If all the parts will have equal elements, then we need to know the number of elements that at minimum should be in each part excluding the extra element. 
+An easy way to achieve this for both even and odd numbers is to use the double slash operator. This operator performs a division operation that results in a whole number excluding the fractional part. 
+
+        rem = counts % k
+        
+Next, we will get the extra elements remaining. We use the modulus operator to easily achieve this. 
+
+
+Next, we will construct a loop that will run based on how many sub lists is to be created. 
+Assume k is 4, it means the loop will run 4 times. Each time the loop runs, a sub list should be created. 
+How will this sublist be created? 
+Typically, we will iterate through the nodes. 
+While iterating through the nodes, we need to add each element to a nodes list. 
+But the nodes list should be made up of list of elements not elements themselves. 
+So how will we achieve this list of elements? 
+We will use an inner loop to build the sublist using a new head node. 
+The inner loop will run based on how many elements should be in each sub list. Specifically, the minimum elements that should be in each sub list. 
+
+We will use the data set 1, 2, 3, 4, and 5 to understand the loop. 
+For this data set, let's assume k is 3. This means we will have three sub lists in each returned list. 
+How many elements will be in each sub list? We will divide 5 by 3 which will give us 1 and a remainder of 2. This means each sub list will have at least one element. But the first two sub lists will have one extra element. Sub list 1 will have 1 and 2, sub list 2 will have 3 and 4, sub list 3 will have 5.
+
+For the loop we will define, it will run 3 times. The first time it runs, it should build a linked list with the element 1 and 2 and append it to a nodes list. The second time it runs, it should build a linked list with the elements 3 and 4 and append it to a nodes list. The third time it runs, it should build a linked list with just the element 5 and append it to a nodes list. 
+How will this be achieved? 
+In each iteration of the loop, an inner loop will be defined that will run based on the minimum number of elements that should be in each sub list. 
+For the data set we are operating on, this mean the inner loop will run one time. 
+When it runs, it should add the current element as the next node of a temporary head element whose value is 0. The value can be anything. 0 is just being used. 
+After doing that, it should increment things. It will need to increment the current node being used to build the sub list. It will also need to increment the current node of the main list. The latter is necessary because we still have more sub lists to build. 
+When the inner loop has finished running, we now need to check if there is a need to add an extra element. 
+If there is, we will create a new node with the data to be added, and make it the next node of the current node in the sub list. We will then increment the current node of the main list since one more data has been added to the sub list. 
+Finally, we will append the next node of the head node of the sub list to the nodes list. Why the next node and not the head node itself? 
+The next node because our data starts from the next node. The head node was only added to make it possible for us to build the sub list. 
+When the last code has been executed, the loop will enter its next iteration. 
+We don't need to do anything to the control variables since the loop is operating on a range of numbers not on an integer control variable. 
+To add the extra element to the sub list, there is a need for us to create a new node. This is because if we assign the current node directly, the current node has a next node. This will ensure all the remaining nodes are part of the sub list which defeats the purpose of the partitioning. 
+After adding an extra element, there is a need for us to remove 1 from the variable holding the total number of extra nodes to be added. 
+
+		nodes = []
+        for i in range(k):
+            head = Node(0)
+            each = head
+            for j in range(num):
+                node = Node(root.node_data)
+                each.next_node = node
+                each = each.next_node
+                root = root.next_node
+            if rem:
+                rmnode = Node(root.node_data)
+                each.next_node = rmnode
+                if root.next_node:
+                    root = root.next_node
+                rem -= 1
+            nodes.append(head.next_node)
+        return nodes
+       
+Now, you need to understand that if the length of the original list is 5 and k is 10, the outer for loop will run 10 times, but the inner for loop will never execute its body. This is because num will be 0 producing the loop for j in range(0). The body of such a loop will never execute.
+How then will the sub lists be built? 
+In such a scenario, there will be rem. Rem will be 5. The rem code will therefore execute 5 times to ensure five sub lists are built containing just one element. 
+At some point, rem will be 0. The remaining sub lists will be built by the continuous running of the code nodes.append(head.next_node). But the lists to be built will all be empty lists since head.next_node is None. 
+The head we  are talking about here is the head constructed inside the loop not the root head.
+
