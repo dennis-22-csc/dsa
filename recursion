@@ -1,0 +1,220 @@
+Understanding recursion
+
+The below is a recursive function. How does it work?
+
+def print_num(n):
+    if n > 0:
+        print(n)
+        print_num(n-1)
+
+print_num(10)
+
+First of all, a recursive function is a function that call itself in order to repeatedly perform an operation until a given condition known as a base case is met.
+Traditionally, loops are how operations are repeatedly performed. But loops are not the only way to repeatedly perform operations. Recursive functions can also be employed.
+
+In the above code, print_num is a recursive function that repeatedly calls itself until its parameter n is 0. Once it becomes zero, the function is expected to return.
+But when n isn't zero yet, the function will keep calling itself.
+But the function has been coded such that before it calls itself, it will first print the value of n. 
+
+Now, what should you understand about recursive functions? 
+You need to understand that recursive functions don't return until a base condition is met. 
+Another thing you need to understand is that each call to a recursive function is added to a stack. By the time a recursive function reaches a base condition and returns, it is the nth copy of the recursive function that is returning. This is to say there are many copies of the recursive function in the stack and this depends on how many times the function is called in the entire operation. 
+If the function is called nine times, it means there are nine copies of the function in the stack. And when the function returns, it is the 9th copy that is returned. The other copies are yet to return but they will still need to be returned. 
+What is the point of this knowledge? 
+Well, the knowledge of how a recursive function returns is important because when a copy of a recursive function returns, it executes code immediately after it until there is no more codes to execute after which that copy returns, and repeates the cycle of executing codes after it and returning and repeating the cycle. 
+The cycle will be repeated until the first copy of the recursive function returns. 
+
+To illustrate this, we will integrate code printing the string "Dennis" after the call to the function. You will see that this code will only be executed after the last value of n has been printed and the base condition has been met. 
+The code will then be repeatedly executed since it is being executed after each copy of the recursive function is returned. 
+
+def print_num(n):
+    if n > 0:
+        print(n)
+        print_num(n-1)
+        print("Dennis")
+
+print_num(10)
+
+Output:
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Dennis
+Dennis
+Dennis
+Dennis
+Dennis
+Dennis
+Dennis
+Dennis
+Dennis
+Dennis
+
+We can add one more code after the call to the function and that code will be executed alongside print("Dennis") when each copy of the function returns.
+
+def print_num(n):
+    if n > 0:
+        print(n)
+        print_num(n-1)
+        print("Dennis")
+        print(2023)
+
+print_num(10)
+
+Output:
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Dennis
+2023
+Dennis
+2023
+Dennis
+2023
+Dennis
+2023
+Dennis
+2023
+Dennis
+2023
+Dennis
+2023
+Dennis
+2023
+Dennis
+2023
+Dennis
+2023
+
+The function will created print numbers starting from 10 and ending in 1. What if we instead want the printing to start from 1 and stop in 10 while still creating a recursive function? 
+Well, we can utilize the knowledge that recursive functions execute codes that come after they are returned. 
+This means we will print the value of n after the code recursively calling the function. This means when each copy of the function returns, the value of n will be printed. 
+The most recently created copy of the function is what will return and when it does, n will be 1. When n is printed, 1 will be printed. The preceding copy of the function will next be returned. When it does, n will be 2. When n is printed, 2 will be printed. And on and on. 
+
+def print_num(n):
+    if n > 0:
+        print_num(n-1)
+        print(n)
+
+print_num(10)
+
+Output:
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+In sum, recursive functions have two phases, the calling phase and the returning phase.
+In the calling phase of a recursive function, the function executes codes before the call. In the returning phase of a recursive function, the function executes codes after the call.
+
+Can you explain the behaviour of the below recursive function? 
+
+def print_num(n):
+    if n > 0:
+        return print_num(n-1) + n
+    return 0
+
+print("Result: ", print_num(10))
+
+Result:  55
+
+I'll try.
+When the print_num function is called, the function is expected to return a result. But because the function is a recursive function, the result will only start to be returned when the last copy of the function is created and the base condition is met.
+But what we need to understand to understand the function is that we still need to separate the calling phase from the return phase. This means the we need to trace the calling phase from beginning to the end before starting to trace the returning phase.
+The function will stop calling itself when n is 0. If n is initially 10, the values of n through out the calling phase will be 10, 9, 8, 7, 6, 5, 4, 3, 2, 1.
+When n is 0, the base case has been met and the first return will be made.
+This begins the return phase.
+Now, for the first return, since n is 0, the function will return 0.
+When n is 1, the function will return 0 + 1 which is 1.
+When n is 2, the function will return 1 + 2 which is 3.
+When n is 3, the function will return 3 + 3 which is 6.
+When n is 4, the function will return 6 + 4 which is 10.
+When n is 5, the function will return 10 + 5 which is 15.
+When n is 6, the function will return 15 + 6 which is 21.
+When n is 7, the function will return 21 + 7 which is 28.
+When n is 8, the function will return 28 + 8 which is 36.
+When n is 9, the function will return 36 + 9 which is 45.
+When n is 10, the function will return 45 + 10 which is 55.
+
+
+What if the code is the below?
+
+def print_num(n):
+    x = 0
+    if n > 0:
+        x += 1
+        return print_num(n-1) + x
+    return 0
+
+print("Result: ", print_num(10))
+
+Output 
+Result: 10
+
+Why is result 10?
+Just like we did previously, we will separate the function into calling phase and returning phase.
+In the calling phase, the values of n will be 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0.
+But in each call, the value of x will be 1 since x is a local variable. 
+
+When n is 0, the returning phase will begin.
+The function will return 0.
+When n is 1, the function will return  0 and 0 will be added to 1 to give us 1.
+When n is 2, the function will return  1 and 1 will be added to 1 to give us 2.
+When n is 3, the function will return  2 and 2 will be added to 1 to give us 
+3.
+... 
+When n is 9, the function will return 8 and 8 will be added to 1 to give us 9.
+When n is 10, the function will return 9 and 9 will be added to 1 to give us 10.
+The final output of the function will be 10.
+
+What if x is a global variable? 
+x = 0
+def print_num(n):
+    global x
+    if n > 0:
+        x += 1
+        return print_num(n-1) + x
+    return 0
+
+print("Result: ", print_num(10))
+
+
+Output 
+Result:  100
+
+In that case, when n is 10, x will be 1. When n is 9, x will be 2...When n is 1, x will be 10.
+When n is 1, the function will return 0 and the zero will be added to 10 to make 10.
+When n is 2, the function will return 10 and the 10 will be added to 10 to make 20.
+When n is 3, the function will return 20 and the 20 will be added to 10 to make 30.
+...
+When n is 10, the function will return 90 and the 90 will be added to 10 to make 100.
+
+
+Tracing Recursion
+In tracing recursion, it will make the tracing easier if you see recursion as a tree.
+At the top of the tree will be the first copy of the recursive function.
+The first copy of a recursive function will have two groups of branches.
+The first group comprises of codes before the recursive call. The second branch will be a branch holds the second copy of the recursive function.
+You will keep building the tree until all the copies have been placed on the right side of each branch.
+But understand that this tree is for just the calling phase of the function. You still need to draw a diagram to trace the returning phase of the function. The returning phase may necessitate another tree if the recursive function is called again. 

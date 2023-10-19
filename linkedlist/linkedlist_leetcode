@@ -3,7 +3,7 @@ Linkedlist Leetcode problems(https://leetcode.com/tag/linked-list/)
 Insert 
 1. Populating Next Right Pointers in Each Node(https://leetcode.com/problems/populating-next-right-pointers-in-each-node) Medium 
 2. Populating Next Right Pointers in Each Node II(https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii) Medium 
-4. Insert into a Sorted Circular Linked List(https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list) Medium 
+3. Insert into a Sorted Circular Linked List(https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list) Medium 
 
 Partition 
 1. Split Linked List in Parts(https://leetcode.com/problems/split-linked-list-in-parts) Medium 
