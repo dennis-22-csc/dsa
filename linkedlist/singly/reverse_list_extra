@@ -1,0 +1,71 @@
+Let's assume we have the list 1, 2, 3, 4, 5, we want to reverse it to 5, 4, 3, 2, 1.
+What we basically want to do is make 1 point to None and 2 point to 1, and 3 point to 2, and 4 point to 3 and 5 point to 4.
+5 will effectively become the new head node. 
+To achieve this, we will iterate through each element as usual. 
+But when the current element is 1, we will make 1 to point to the previous element which starts at None. Effectively, 1 points to None. 
+But after we've assigned the current element 1 to previous, in the second iteration of the loop, the current element 2 will point to the previous element 1.
+We will keep doing that until we get to the last element 5 which should point to the previous element 4. 
+
+def reverse_list_iterative(mylist):
+    head = mylist.head_node
+    previous, current = None, head
+    while current:
+        next_node = current.next_node
+        current.next_node = previous
+        previous = current
+        current = next_node
+    mylist.head_node = previous
+
+
+How does the recursive solution work? 
+The first time the function is called, the reverse_list function will be called taking the head node 1 as argument. Internally, the function will call itself taking the next node 2 as argument. 
+Internally, the function will call itself taking the next node 3 as argument. 
+Internally, the function will call itself taking the next node 4 as argument. 
+Internally, the function will call itself taking the next node 5 as argument. 
+But because next node 5 doesn't have a next node, the function will return. 
+def reverse_list_recursive(mylist):
+    def reverse_list(head):
+        if not head or not head.next_node:
+            return head
+        ret = reverse_list(head.next_node)
+        head.next_node.next_node = head
+        head.next_node = None
+        return ret
+    ret = reverse_list(mylist.head_node)
+    mylist.head_node = ret
+
+The last two recursive solutions I've tried to understand have led to dead ends.
+I may have stumbled upon a break through article.
+The article has tripled my understanding of recursion.
+I can now tackle the reverse_list_recursive function.
+
+When head is 5, the fifth copy of the function will return. It is returning because 5 doesn't have a next node.
+When it returns, 4 (current head) will be assigned to head.next_node.next_node.
+Question, what is head.next_node.next_node?
+Head is 4. Head next node is 5. 
+This means we are making 4 to be the next node of 5.
+And making 4 to point to None because it currently points to 5.
+At the return of the fourth copy of the function, 4 will be the next node of 5 and None will be the next node of 4. 
+But 4 is still the next node of 3. We need to make 3 the next node of 4.
+We will do that inside the third copy of the function. 
+In the third copy of the function, head is 3. Head.next_node is 4.
+We can easily make 3 to become the next node of 4 and make 3 to point to None. 
+That is exactly what was done. 
+At the return of the third copy of the function, 3 will be the next node of 4 and 3 will point to None. 
+Now, 2 still points to 3. We instead need to make 3 point to 2 and 2 point to None. 
+We will do that inside the second copy of the function. 
+In the second copy of the function, head is 2. We can easily make 3 to point to 2 and 2 to point to None and that was exactly what was done. 
+At the return of the second copy of the function, 3 will point to 2 and 2 will point to None. 
+Now, 1 still points to 2. We instead need to make 2 points to 1 and 1 point to None. 
+We will do that in the first copy of the function. 
+In the first copy of the function, head is 1.
+We can then easily make 2 to point to 1 and 1 to point to None. 
+That was exactly what was done. 
+At the return of the first copy of the function, 2 points to 1 and 1 points to None. 
+
+Now, how do we get the new head? 
+Well, the last copy of the function returned the new head and each subsequent copy of the function returns the same head since the function was coded such that its return value is the return value of the recursive call. 
+
+After getting the new head, we assign it to the head_node property of mylist. 
+
+
