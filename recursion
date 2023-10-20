@@ -217,4 +217,164 @@ At the top of the tree will be the first copy of the recursive function.
 The first copy of a recursive function will have two groups of branches.
 The first group comprises of codes before the recursive call. The second branch will be a branch holds the second copy of the recursive function.
 You will keep building the tree until all the copies have been placed on the right side of each branch.
-But understand that this tree is for just the calling phase of the function. You still need to draw a diagram to trace the returning phase of the function. The returning phase may necessitate another tree if the recursive function is called again. 
+But understand that this tree is for just the calling phase of the function. You still need to draw a diagram to trace the returning phase of the function. The returning phase may necessitate another tree if the recursive function is called again.
+
+
+Types of recursion
+1. Tail recursion
+def print_num(n):
+	if n > 0:
+		print(n)
+		print_num(n-1)
+		
+In this recursion, the recursive call is the last statement in the recursive function. After the call, there is nothing. This means when each copy of the function returns, no further operation will be carried out during each return.
+Operations that need to be carried out usually appear before the recursive call.
+
+2. Head recursion
+def print_num(n):
+	if n > 0:
+		print_num(n-1)
+		print(n)
+
+In this recursion, the recursive call is the first statement in the recursive function. Before the call, there is nothing. But after the call, there expects to be an operation. For this specific function, the operation is for the function to print the value of n.
+What all of these mean is that in a head recursion, no operation is usually performed at call time other than the repeated calling of the recursive function. But at each stage of the function return, operations will be performed.
+
+N.B: If there is something before and after a recursive call, that recursive function is neither an head recursion nor a tail recursion. It is just recursion. No special name for it.
+
+3. Indirect recursion
+def print_num1(n):
+	if n > 0:
+		print(n)
+		print_num2(n-1)
+def print_num2(n):
+	if n > 0:
+		print(n)
+		print_num1(n-1)
+		
+In this type of recursion, two or more functions recursively call theirselves.
+In the above example, two functions are calling theirselves.
+Inside the first function, the recursive call is a call to the second function. Inside the second function, the recursive call is a call to the first function.
+If the functions are three, function one will call function two, function two will call function three, function three will circle back to call function one and function one will repeat the sequence.
+
+But just like every form of recursion, there is a base case. When any of the functions reaches the base case, the functions will enter their return phase.
+
+4. Nested recursion
+def nested(n):
+	if n > 100:
+		return n - 10
+	else:
+		return nested(nested(n+11))
+		
+In this type of recursion, a recursive function calls itself using a call to itself as an argument.
+
+Tracing this recursion will require knowing that two categories of the copies of the function will exist at the duration of the operation of the function.
+The first category are copies of the function whose return value won't be known until the function has reached its base case. The second category are copies that act as arguments and would return some value which would be consumed by the functions whose return value won't be known until the end.
+But what you should understand is that even among the copies of the function acting as arguments, some will still behave like the first category of function before they can arrive at their return values.
+
+So, a useful way to trace this function is to place the first category of functions on the left then draw a line down a bit to the right and start with the argument. If the argument immediately returns a value, draw a straight line to the left and give the function its argument. That function now on the left becomes the second function whose return value is yet to be known. The function on the left is part of the function whose return value are needed in the first category of function.
+The image nested.jpg better illustrates this.
+
+5. Tree recursion
+def print_num(n):
+	if n > 0:
+		print(n)
+		print_num(n-1)
+		print_num(n-1)
+		print("Dennis")
+		
+In this recursion, there are more than one recursive calls. Because of the second recursive call, the execution of this function will follow the structure of a tree.
+But what you should know about tree recursion is that the first recursive call will constitute the calling phase. That is, the first recursive call will be executed repeatedly until n becomes 0.
+When becomes 0, the calling phase ends and we enter the returning phase. This is where things start to get complicated. Because in each return stage, the second recursive call will be executed and each execution of the second recursive call, the first recursive call will be executed, the second recursive call will also be executed.
+The return stage of each recursive call can become complicated the larger the data set.
+But it is traceable. As long as you can keep track of the return stage and not get lost in the second recursive call.
+
+
+Recursion and loops
+Every loop can be implemented as a recursive solution.
+Let's take some common loops.
+
+employees = ["Dennis Koko", "Hilda Benita", "Nathan Petrelli"] 
+
+for employee in employees:
+	print(employee)
+	
+The above can be implemented recursively.
+A loop repeatedly perform an operation in this case printing an employee name.
+We can create a function that takes an argument index, prints the name associated with that index, calls itself with index + 1.
+What will be the base case for this function? When should the function stop printing?
+The thing is that the function should actually only print if the index is less than the length of the list. 
+Where I missed it was that I forgot the recursive function will be taking both the list and the index as argument because whatever it takes as parameter in the function definition is what it will take as argument in the recursive call.
+I had it in mind that the function definition will take a list as argument while the recursive call will take just index as argument. 
+What an error. 
+Since the recursive call will also be taking list as argument, it's easy for me to implement a base case. 
+But the base case I thought about implementing is that when the index is greater than or equal to the length of the list, the function should abort. 
+I didn't think that I can wrap the entire operation of the function inside the if condition such that the operation will only execute if the index is less than the length of the list. 
+
+def print_list(mylist, index):
+	if index < len(mylist):
+		print(mylist[index])
+		print_list(mylist, index + 1)
+
+employees = ["Dennis Koko", "Hilda Benita", "Nathan Petrelli"]
+start_index = 0
+print_list(employees, start_index)
+
+Another loop is the below:
+
+salaries = [150000, 200000, 100000, 700000, 250000, 320000, 300000, 450000, 400000, 750000]
+
+for i in range(len(salaries)):
+	salaries [i] = salaries[i] * 1.04
+	
+What the loop is doing is getting the salary, changing its value. 
+
+Recursive implementation 
+
+def update_salaries_for_all(salaries, index):
+	if index < len(salaries):
+		salaries[index] = salaries[index] * 1.04
+		update_salaries_for_all(salaries, index + 1)
+
+salaries = [150000, 200000, 100000, 700000, 250000, 320000, 300000, 450000, 400000, 750000]
+print("Employees Salaries List: ", salaries) 
+start_index = 0
+update_salaries_for_all(salaries, start_index)
+print("Employees Salaries List After Raise: ", salaries)
+
+Code using loop
+
+employees = ["Dennis Koko", "Lincoln Burrow", "Michael Scofield", "Nathan Petrelli", "Peter Petrelli", "Sarah Connor", "John Connor", "Raymond Gray", "Ryan Whitewater", "Jessica Roberts"]
+
+print("Employees List: ", employees) 
+
+sublist1 = [] 
+sublist2 = [] 
+for i in range(len(employees)):
+	if i < 5:
+		sublist1.append(employees[i])
+	else:
+		sublist2.append(employees[i])
+
+print("Sub List 1: ", sublist1)
+print("Sub List 2: ", sublist2)
+
+
+Recursive implementation
+
+def half_list(mylist, index, sublist1, sublist2):
+    if index < len(mylist):
+        if index < 5:
+            sublist1.append(mylist[index])
+        else:
+            sublist2.append(mylist[index])
+        half_list(mylist, index + 1, sublist1, sublist2)
+
+employees = ["Dennis Koko", "Lincoln Burrow", "Michael Scofield", "Nathan Petrelli", "Peter Petrelli", "Sarah Connor", "John Connor", "Raymond Gray", "Ryan Whitewater", "Jessica Roberts"]
+print("Employees List: ", employees) 
+start_index = 0
+sublist1 = [] 
+sublist2 = [] 
+half_list(employees, start_index, sublist1, sublist2)
+print("Sub List 1: ", sublist1)
+print("Sub List 2: ", sublist2)
+
