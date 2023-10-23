@@ -1,0 +1,86 @@
+61. Rotate List
+Given a linked list, rotate the list to the right by k places, where k is non-negative.
+
+Example 1:
+
+Input: 1->2->3->4->5->NULL, k = 2
+Output: 4->5->1->2->3->NULL
+Explanation:
+rotate 1 steps to the right: 5->1->2->3->4->NULL
+rotate 2 steps to the right: 4->5->1->2->3->NULL
+
+The complication here is the k steps. 
+If k is 1, 5 will be the head node, then the previous head node will be the next node of 5. Then 4 should point to None. 
+If k is 2... 
+Okay. It seems this is solvable. 
+First of all, the rotation will start from the last node and will take place k times. 
+If we would be creating a loop for this, there would be an outer loop that runs k times and an inner loop that runs through the list. 
+Also, each time the outer loop runs, the inner loop will run on a different version of the list. 
+The first outer run will be on the original list. 
+The second will be on the rotated list. 
+What will basically happen in each run of the outer loop is that the head node will be stored, the loop will be traversed to the last node, the last node will be made to be the new head. The node whose next node is the last node will at the same time be made to point to none. 
+How are we going to identify the node whose next node is the last node? 
+Very easy. 
+First of all, the next node of the next node of the node will be None. If it has a next node. 
+Once we identify the node, we can make it point to None. 
+Sadly, if we make it point to None, the loop will effectively exit. 
+So rather than making it point to None, we will simply store it. 
+Then when we've gotten to the end of the list, we will make it point to None. 
+
+current_head = mylist.head_node 
+current_node = current_head
+before_last = None
+while k:
+	while current_node.next_node:
+		if current_node.next_node and not current_node.next_node.next_node:
+			before_last = current_node 
+		current_node.next_node = current_head
+		current_head = current_node 
+		current_node = current_node.next_node 
+		before_last.next_node = None
+	current_node = current_head
+	k -= 1
+	
+Example 2:
+Input: 0->1->2->NULL, k = 4
+Output: 2->0->1->NULL
+Explanation:
+rotate 1 steps to the right: 2->0->1->NULL
+rotate 2 steps to the right: 1->2->0->NULL
+rotate 3 steps to the right: 0->1->2->NULL
+rotate 4 steps to the right: 2->0->1->NULL
+
+After much trial and error, I came up with the below:
+
+from singly_linked_list import SinglyLinkedList
+
+def rotate_list(mylist, k):
+    current_head = mylist.head_node
+    current_node = current_head
+    before_last = current_head
+    while k:
+        while current_node.next_node:
+            if current_node.next_node and current_node.next_node.next_node is None:
+                before_last = current_node
+            current_node = current_node.next_node
+        current_node.next_node = current_head
+        current_head = current_node
+        current_node = current_head
+        before_last.next_node = None
+        k -= 1
+    mylist.head_node = current_head
+	
+
+mylist = SinglyLinkedList()
+mylist.add_first(1)
+#mylist.add_last(2)
+#mylist.add_last(3)
+#mylist.add_last(4)
+#mylist.add(5)
+
+rotate_list(mylist, 1)
+for i in mylist:
+    print(i)
+
+
+It works. 
