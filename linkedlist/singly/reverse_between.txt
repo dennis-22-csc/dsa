@@ -1,0 +1,157 @@
+92. Reverse Linked List II
+Reverse a linked list from position m to n. Do it in one-pass.
+
+Note: 1 ≤ m ≤ n ≤ length of list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL, m = 2, n = 4
+Output: 1->4->3->2->5->NULL
+
+Store the node before the start node in a variable to be used outside the loop. 
+Store the node after the end node in a variable to be used outside the loop. 
+Reverse the nodes from start to end. 
+Connect the head node of the reversed nodes with the node before the start node. Connect the last node of the reversed node with the node after the end node. 
+
+1, 3, 2, 4, 5 (prev 1 pointing to 3. Current 2. Next 3 pointing to current 2. )
+Current moved to 2 again (next node of 3)
+3 made prev. 
+Next 4 pointing to prev 3.
+
+
+If count is 2, reverse current node and its next node. Point current to... 
+3, 2
+4, 2
+3, 4, 2 pass 1
+4, 3, 
+2, 3 pass 2.
+
+Update:
+3 point to 2, 4 points to 3. Pass 1
+Node before 2 points to 4. 
+2 points to Node after 4. 
+
+What if we are to reverse 1, 2, 3 only?
+There won't be a node before 1.
+We will solve that by making previous start with None. 
+What if we are to reverse 3, 4, 5?
+3 will need to point to none. 
+This won't give issues since None is the node after 5
+
+def reverse_list(mylist, m, n):
+	count = 0
+	current_node = mylist.head_node 
+	while current_node.next_node:
+		next_node = current_node.next_node
+		next_node_next_node = next_node.next_node. 
+		if count >= 2:
+			next_node.next_node = current_node 
+			current_node.next_node = next_node_next_node 
+			previous_node.next_node = next_node 
+		previous_node = current_node 
+		current_node = 
+
+
+I've had to look up the solution to the problem and I'm surprised to see that there is no one pass solution.
+The approach of each of the solution mirrored my approach. But I was focused on achieving a one pass solution.
+Why did they mention one pass if there is no one pass solution?
+
+Among the solutions, I chose the below which would be explained
+
+
+def reverse_between(mylist, m, n):
+        dummy = Node(0)
+        Creates a Node 0.
+        
+        prev = dummy
+        Assigns Node 0 to prev. 
+        
+        prev.next_node = mylist.head_node 
+        Makes Node 1 the next node of Node 0
+        
+        p = mylist.head_node 
+        Assigns Node 1 to p. 
+
+        for i in range(1, m):
+        for i in [1]
+            prev = p
+            Assigns Node 1 to prev. 
+            p = p.next_node
+            Assigns Node 2 to p. 
+            
+
+        original_first = p # this is anchor node always pointing to the next-to-be-swapped
+        Assign Node 2 to original_first
+        
+        for i in range(m, n):
+        for i in [2, 3] 
+            current_head = prev.next_node
+            Assigns Node 2 to current head 
+            Assigns Node 3 to current head 
+            
+            future_head = original_first.next_node
+            Assigns Node 3 to future_head 
+            Assigns Node 4 to future head 
+            
+            prev.next_node = future_head
+            Assigns Node 3 as next node of node 1, replacing node 2
+            Assigns Node 4 as next node of node 1, replacing node 3
+            
+            original_first.next_node = future_head.next_node
+            Assigns node 4 as next node of node 2
+            Assigns Node 5 as next node of node 2, replacing node 4
+            
+            future_head.next_node = current_head
+            Assigns Node 2 as next node of node 3
+            Assigns Node 3 as next node of node 4
+
+        mylist.head_node =  dummy.next_node
+
+
+At the start of the loop, we will have the variable original first. This variable will hold the first node among the nodes to be swapped. That is, the node 2.
+Next, we will assign node 2 to a current head variable. Node 2 is currently the head node among the nodes to be swapped. But we won't directly assign node 2 to current head. Instead, the value of current head will be dynamic. The value will depend on the value of previous.next node.
+The value of previous.next node will be...
+
+Get this right, to achieve the reversal, we need to not only swap the nodes, we will need to ensure that 1 points to the last head and 2 points to the node after the original end node.
+Therefore, in each iteration of the loop, we will be dancing between manipulating those two nodes,
+
+1, 2, 3, 4, 5 (1 prev, 2 current head, 3 future head, 4 next node of future head) 
+Make 3 future head the next node of 1 prev. Make 2 current head the next node of 3 future head. Make 4 next node of future head the next node of original first. 
+
+1, 3, 2, 4, 5 (2 original first, 4 next node of original first)
+What is the future head in the above? 4. We've already swapped 2 and 3. The next node to be moved is 4. 4 needs to be moved to be the next node of prev 1.
+What is the current head in the above? 3. The current head will always be prev.next.
+Okay, is it that we are swapping the current head for the future head?
+Yes.
+After 3 is swapped with 4, 3 needs to be made to be the next node of 4.
+The code future_head.next_node = current head achieves that. 
+2 is already the next node of 3, but it needs to be connected with 5. 5 is currently the next node of 4. So before we change the next node of 4 to 3, we need to assign the next node of 4 as the next node of 2.
+
+1, 4, 3, 2, 5
+
+What if the data set is the below and we are to swap 2, 3, 4, 5, 6, 7?
+
+1, 2, 3, 4, 5, 6, 7, 8, 9
+1, 3, 2, 4, 5, 6, 7, 8, 9
+1, 4, 3, 2, 5, 6, 7, 8, 9
+1, 5, 4, 3, 2, 6, 7, 8, 9
+1, 6, 5, 4, 3, 2, 7, 8, 9
+1, 7, 6, 5, 4, 3, 2, 8, 9
+
+So you can see why node 2 is important? And you can see why there was a need to store node 2 in an original first variable.
+
+Now, the below block of code won't run when m is 1:
+
+for i in range(1, m):
+        for i in [1]
+            prev = p
+            Assigns Node 1 to prev. 
+            p = p.next_node
+            Assigns Node 2 to p. 
+            
+This means we can't give prev a start value of None. We instead need to give it a start value of 0 and make its next node point to 1.
+This will ensure that the below code in the second for loop works without issues:
+
+current_head = prev.next_node
+
+
