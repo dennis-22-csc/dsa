@@ -1,0 +1,112 @@
+A tree is a data structure implemented using nodes.
+But unlike linked lists, a tree has a root node and two or more child nodes.
+A tree can be pictured using a body and two legs.
+The body can be said to be the head node and the two legs can be said to be the child nodes.
+But in a tree, the head node can have more than two child nodes.
+Also, the child nodes can have zero or more child nodes.
+
+In creating a tree, we will start by defining a Node with properties left, right, and data. 
+Property left will hold a reference to the Node that will branch to the left side of the node, property right will hold a reference to the Node that will branch to the right side of the Node. 
+What about the Node that will branch to the center? 
+We will address that later.
+
+Since we will be using the same Node object for both the root node and the child nodes, it means every child node can as well have child nodes. This makes sense since every child node of a biological tree can have child nodes.
+
+After creating the different nodes, how do we traverse the nodes and print the their data?
+There are three ways we can traverse a tree.
+1. Inorder traversal
+2. Postorder traversal
+3. Preorder traversal
+
+Assume a tree with root node 1, left child 2, right child 3, left child of left child 4, right child of left child 5, we perform an inorder traversal when we first of all visit the nodes on the left (node 4, 2, 5), we then visit the head node 1, we then visit the nodes on the right (3).
+Note, while 4 and 5 are on the same level, 5 is a right child to left. 4 is a left child to left. We will move from 4 to 2, before moving to 5.
+
+For pre order, we will start with the head node 1. We then move to the left nodes 2, 4, 5. 4 and 5 are child nodes to 2. We will then move to the right node 5.
+
+1, 2, 4, 5, 3
+
+For post order, we will start with the left nodes 2, 4, 5, we will then move to the right node 3, we then end at the head node 1
+
+2, 4, 5, 3, 1
+
+Sadly, the output is showing 4, 5, 2, 3, 1
+
+The best way to understand all of these is to trace the recursive codes.
+
+
+def preorder(root):
+
+    if root:
+        # Traverse root
+        print(str(root.val) + "->", end='')
+        # Traverse left
+        preorder(root.left)
+        # Traverse right
+        preorder(root.right)
+
+We will start by printing 1.
+Next, we will call the recursive function passing 2 as argument. We will then print 2. Next, we will call the recursive function passing 4 as argument. We will then print 4.
+4 doesn't have a left. We will pass None as argument and the fourth copy of the function will return. 
+When it returns, because 4 also doesn't have a right, we will pass None as argument to the second recursive call. The function will return and the third copy of the function will return control to the second copy of the function. 
+In the second copy of the function, root is 2. Right of 2 is 5. 5 will be printed. 
+5 doesn't have a right. The newly created third copy of the function will return. Then the second copy of the function will return control to the first copy of the function. 
+In the first copy of the function, root is 1.
+Root right is 3. 3 will be printed. Because 3.left is None, the newly created second copy of the function will return.
+Because 3.right is also None, the newly created second copy of the function will return.
+Next, the first copy of the function will return.
+
+
+def postorder(root):
+
+    if root:
+        # Traverse left
+        postorder(root.left)
+        # Traverse right
+        postorder(root.right)
+        # Traverse root
+        print(str(root.val) + "->", end='')
+
+The first copy of the function will be created with argument 1.
+The second copy of the function will be created with argument 2. 
+The third copy of the function will be created with argument 4.
+The fourth copy of the function will be created with argument None. The copy will return. 
+A second fourth copy will be created with argument None. The copy will return. 
+The value injected to the third copy of the function will be printed and that's 4.
+Control will return to the second copy of the function. 
+A new third copy of the function will be created with argument 5.
+5 doesn't have a left and right, 5 will be printed, control will return back to the second copy of the function. 
+2 will be printed. 
+Control will return to the first copy of the function. 
+A new second copy of the function will be created with argument 3.
+3 doesn't have left and right, 3 will be printed. Control will return to the first copy of the function. 
+1 will be printed. 
+The first copy of the function will exit. 
+
+
+def inorder(root):
+
+    if root:
+        # Traverse left
+        inorder(root.left)
+        # Traverse root
+        print(str(root.val) + "->", end='')
+        # Traverse right
+        inorder(root.right)
+
+The first copy of the function will be created with argument 1.
+The second copy of the function will be created with argument 2. 
+The third copy of the function will be created with argument 4.
+4.left is None, 4 will be printed. 
+4.right is None, the third copy of the function will return. 
+2 will be printed. 
+A new third copy of the function will be created with argument 5.
+5.left is None. 5 will be printed. 5.right is None, the new third copy of the function will return. 
+The second copy of the function will return. 
+1 will be printed. 
+A new second copy of the function will be created with argument 3.
+3.left is None, 3 will be printed. 3.right is None, the new second copy of the function will return. 
+First copy of the function will return. 
+
+4, 2, 5, 1, 3
+
+
